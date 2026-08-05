@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_USE_POWERSHELL_TOOL": "1",
+    "CLAUDE_CODE_POWERSHELL_RESPECT_EXECUTION_POLICY": "1"
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "PowerShell(pnpm dev)",
+      "PowerShell(pnpm lint)",
+      "PowerShell(pnpm typecheck)",
+      "PowerShell(pnpm test)",
+      "PowerShell(pnpm test:rust)",
+      "PowerShell(pnpm test:core)",
+      "PowerShell(pnpm build)",
+      "PowerShell(pnpm verify:release)",
+      "PowerShell(git status *)",
+      "PowerShell(git diff *)",
+      "PowerShell(git log *)",
+      "PowerShell(rg *)",
+      "PowerShell(Get-ChildItem *)"
+    ],
+    "ask": [
+      "PowerShell(git push *)",
+      "PowerShell(git reset *)",
+      "PowerShell(git clean *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(Invoke-WebRequest *)",
+      "PowerShell(Invoke-RestMethod *)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Edit(.env)",
+      "Read(.env.local)",
+      "Edit(.env.local)",
+      "Read(.env.development)",
+      "Edit(.env.development)",
+      "Read(.env.development.local)",
+      "Edit(.env.development.local)",
+      "Read(.env.test)",
+      "Edit(.env.test)",
+      "Read(.env.test.local)",
+      "Edit(.env.test.local)",
+      "Read(.env.production)",
+      "Edit(.env.production)",
+      "Read(.env.production.local)",
+      "Edit(.env.production.local)",
+      "Read(secrets/**)",
+      "Edit(secrets/**)",
+      "Read(*.pfx)",
+      "Edit(*.pfx)",
+      "Read(*.p12)",
+      "Edit(*.p12)",
+      "Read(*.keystore)",
+      "Edit(*.keystore)",
+      "Read(*.key)",
+      "Edit(*.key)"
+    ]
+  }
+}

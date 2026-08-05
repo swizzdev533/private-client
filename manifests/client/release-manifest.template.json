@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "channel": "local-unsigned",
+  "artifacts": [
+    {
+      "name": "PrivateClient.exe",
+      "platform": "windows",
+      "arch": "x86_64",
+      "signed": false
+    },
+    {
+      "name": "setup.exe",
+      "platform": "windows",
+      "arch": "x86_64",
+      "signed": false
+    }
+  ]
+}

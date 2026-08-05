@@ -1,0 +1,5 @@
+privateclientcore.guard.title=Sign in required
+privateclientcore.guard.line1=Sign in inside the game before joining multiplayer.
+privateclientcore.guard.line2=Open the account switcher from the main menu, then try again.
+privateclientcore.guard.back=Back to main menu
+privateclientcore.guard.retry=Check session again

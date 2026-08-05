@@ -1,0 +1,156 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            name = 'forge'
+            url = 'https://maven.minecraftforge.net'
+        }
+    }
+    dependencies {
+        // Timestamped ForgeGradle 2.1 build 42. Unlike 2.1-SNAPSHOT this
+        // coordinate cannot silently move to a different plugin binary.
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-20211118.174922-42'
+    }
+}
+
+def forgeGradleArtifact = buildscript.configurations.classpath
+        .resolvedConfiguration
+        .resolvedArtifacts
+        .find {
+            it.moduleVersion.id.group == 'net.minecraftforge.gradle' && it.name == 'ForgeGradle'
+        }
+if (forgeGradleArtifact == null) {
+    throw new GradleException('Pinned ForgeGradle artifact was not resolved')
+}
+def forgeGradleDigest = java.security.MessageDigest.getInstance('SHA-256')
+forgeGradleArtifact.file.withInputStream { stream ->
+    byte[] buffer = new byte[64 * 1024]
+    int count
+    while ((count = stream.read(buffer)) != -1) {
+        forgeGradleDigest.update(buffer, 0, count)
+    }
+}
+def forgeGradleSha256 = forgeGradleDigest.digest()
+        .collect { String.format('%02X', it & 0xff) }
+        .join()
+if (forgeGradleSha256 != '29F4F9A4B7AD917937D6CA761404ED4C56EE2A716CBFDD190B9AA99F25EB4695') {
+    throw new GradleException('Pinned ForgeGradle SHA-256 verification failed')
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+group = 'client.privateclient'
+version = '1.0.0'
+archivesBaseName = 'private-client-core'
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = '1.8.9-11.15.1.2318-1.8.9'
+    runDir = 'run'
+    mappings = 'stable_22'
+    makeObfSourceJar = false
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile 'junit:junit:4.13.2'
+}
+
+tasks.withType(JavaCompile).all {
+    options.encoding = 'UTF-8'
+    options.compilerArgs += ['-Xlint:all', '-Xlint:-processing']
+}
+
+test {
+    useJUnit()
+    maxParallelForks = 1
+    testLogging {
+        events 'failed', 'skipped'
+        exceptionFormat 'full'
+    }
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+    def discordApplicationId = System.getenv('PRIVATE_CLIENT_DISCORD_APPLICATION_ID') ?: '1533770052908744755'
+    inputs.property 'discordApplicationId', discordApplicationId
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand([
+            version: project.version,
+            mcversion: '1.8.9',
+            forgeversion: '11.15.1.2318'
+        ])
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        include 'discord-presence.properties'
+        expand([discordApplicationId: discordApplicationId])
+    }
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info', 'discord-presence.properties'
+    }
+}
+
+jar {
+    archiveName = "private-client-core-1.0.0.jar"
+    manifest {
+        attributes(
+            'Implementation-Title': 'Private Client Core',
+            'Implementation-Version': project.version,
+            'Built-For-Minecraft': '1.8.9',
+            'Built-For-Forge': '11.15.1.2318',
+            'FMLCorePlugin': 'client.privateclient.srv.PrivateClientLoadingPlugin',
+            'FMLCorePluginContainsFMLMod': 'true'
+        )
+    }
+}
+
+task verifyModJar(dependsOn: reobfJar) {
+    doLast {
+        [
+            new File(buildDir, "libs/private-client-core-1.0.0.jar")
+        ].each { output ->
+            if (!output.isFile()) {
+                throw new GradleException("Expected module JAR was not created: ${output}")
+            }
+            def zip = new java.util.zip.ZipFile(output)
+            try {
+                if (zip.getEntry('mcmod.info') == null) {
+                    throw new GradleException("Module JAR is missing mcmod.info: ${output.name}")
+                }
+            } finally {
+                zip.close()
+            }
+        }
+    }
+}
+
+task writeSha512(dependsOn: verifyModJar) {
+    doLast {
+        [
+            new File(buildDir, "libs/private-client-core-1.0.0.jar")
+        ].each { input ->
+            def digest = java.security.MessageDigest.getInstance('SHA-512')
+            input.withInputStream { stream ->
+                byte[] buffer = new byte[64 * 1024]
+                int count
+                while ((count = stream.read(buffer)) != -1) {
+                    digest.update(buffer, 0, count)
+                }
+            }
+            def hash = digest.digest().collect { String.format('%02x', it & 0xff) }.join()
+            def output = new File(input.parentFile, input.name + '.sha512')
+            output.setText(hash + '  ' + input.name + System.lineSeparator(), 'UTF-8')
+        }
+    }
+}
+
+build.dependsOn verifyModJar
+build.dependsOn writeSha512

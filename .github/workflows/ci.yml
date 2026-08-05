@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "8"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Frontend checks
+        run: |
+          pnpm lint
+          pnpm typecheck
+          pnpm test
+          pnpm test:association-api
+          pnpm build:ui
+
+      - name: Core tests
+        shell: powershell
+        run: ./minecraft/private-client-core/scripts/build-core.ps1
+
+      - name: Rust checks
+        run: |
+          cargo fmt --manifest-path apps/launcher/src-tauri/Cargo.toml --check
+          cargo clippy --manifest-path apps/launcher/src-tauri/Cargo.toml --all-targets -- -D warnings
+          cargo test --manifest-path apps/launcher/src-tauri/Cargo.toml
+
+      - name: Secret scan
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Dependency evidence
+        shell: powershell
+        run: |
+          ./scripts/release/generate-license-report.ps1
+          ./scripts/release/generate-sbom.ps1
+
+      - name: Production launcher and NSIS
+        run: pnpm build:launcher
+
+      - name: Package and verify
+        shell: powershell
+        run: |
+          ./scripts/release/package-release.ps1
+          ./scripts/verification/verify-release.ps1
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: private-client-windows-x64
+          path: |
+            artifacts/release/**
+            reports/licenses/**
+            reports/sbom/**
+            apps/launcher/src-tauri/target/x86_64-pc-windows-msvc/release/bundle/nsis/**

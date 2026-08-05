@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://private-client.invalid/schemas/required-mods.schema.json",
+  "title": "Private Client required mods manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "minecraftVersion", "loader", "mods"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "minecraftVersion": { "const": "1.8.9" },
+    "loader": { "const": "forge" },
+    "mods": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "provider",
+          "version",
+          "required",
+          "removable",
+          "license"
+        ],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+          "provider": { "enum": ["private-client-build", "modrinth"] },
+          "projectId": { "type": "string", "maxLength": 64 },
+          "versionId": { "type": "string", "maxLength": 64 },
+          "version": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "fileName": { "type": "string", "pattern": "^[^/\\\\]+\\.jar$" },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://" },
+          "sha512": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+          "sha1": { "type": "string", "pattern": "^[a-f0-9]{40}$" },
+          "hashPolicy": { "const": "compute-at-release" },
+          "required": { "const": true },
+          "removable": { "const": false },
+          "license": { "type": "string", "minLength": 1, "maxLength": 80 },
+          "reviewStatus": { "enum": ["internal", "external-required"] },
+          "notes": { "type": "string", "maxLength": 600 }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": { "provider": { "const": "modrinth" } },
+              "required": ["provider"]
+            },
+            "then": {
+              "required": ["projectId", "versionId", "url", "sha512", "sha1"]
+            }
+          },
+          {
+            "if": {
+              "properties": { "provider": { "const": "private-client-build" } },
+              "required": ["provider"]
+            },
+            "then": {
+              "required": ["fileName", "hashPolicy"]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

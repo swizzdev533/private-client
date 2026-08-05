@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://private-client.invalid/schemas/release-manifest.schema.json",
+  "title": "Private Client local release manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "version", "channel", "publishedAt", "artifacts"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "channel": { "const": "local-unsigned" },
+    "publishedAt": { "type": "string", "format": "date-time" },
+    "artifacts": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "platform", "arch", "size", "sha512", "signed"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[^/\\\\]+\\.exe$" },
+          "platform": { "const": "windows" },
+          "arch": { "const": "x86_64" },
+          "size": { "type": "integer", "minimum": 1 },
+          "sha512": { "type": "string", "pattern": "^[a-f0-9]{128}$" },
+          "signed": { "const": false }
+        }
+      }
+    }
+  }
+}

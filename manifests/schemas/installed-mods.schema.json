@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://private-client.invalid/schemas/installed-mods.schema.json",
+  "title": "Private Client installed mods database",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "mods"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "mods": {
+      "type": "array",
+      "maxItems": 2048,
+      "items": { "$ref": "#/$defs/mod" }
+    }
+  },
+  "$defs": {
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{128}$"
+    },
+    "mod": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modId",
+        "name",
+        "provider",
+        "versionId",
+        "fileName",
+        "installedSha512",
+        "minecraftVersion",
+        "loader",
+        "required",
+        "installedAt",
+        "dependencies"
+      ],
+      "properties": {
+        "modId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "name": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "provider": { "enum": ["modrinth", "local-import", "private-client"] },
+        "projectId": { "type": ["string", "null"], "maxLength": 64 },
+        "versionId": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "fileName": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 180,
+          "pattern": "^[^/\\\\]+\\.jar$"
+        },
+        "installedSha512": { "$ref": "#/$defs/hash" },
+        "providerHashes": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]+$"
+          }
+        },
+        "minecraftVersion": { "const": "1.8.9" },
+        "loader": { "const": "forge" },
+        "environment": { "enum": ["client", "client_and_server"] },
+        "license": { "type": ["string", "null"], "maxLength": 80 },
+        "required": { "type": "boolean" },
+        "installedAt": { "type": "string", "format": "date-time" },
+        "dependencies": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": { "type": "string", "maxLength": 64 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "hits": [
+    {
+      "project_id": "fixturemod",
+      "project_type": "mod",
+      "slug": "fixture-forge-mod",
+      "author": "Fixture Author",
+      "title": "Fixture Forge Mod",
+      "description": "Deterministic test result.",
+      "categories": ["forge"],
+      "display_categories": ["forge"],
+      "versions": ["1.8.9"],
+      "downloads": 42,
+      "follows": 2,
+      "icon_url": null,
+      "date_created": "2020-01-01T00:00:00Z",
+      "date_modified": "2020-01-02T00:00:00Z",
+      "latest_version": "1.8.9",
+      "license": "MIT",
+      "client_side": "required",
+      "server_side": "optional",
+      "gallery": [],
+      "featured_gallery": null,
+      "color": null
+    }
+  ],
+  "offset": 0,
+  "limit": 20,
+  "total_hits": 1
+}

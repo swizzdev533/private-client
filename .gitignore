@@ -1,0 +1,69 @@
+node_modules/
+dist/
+target/
+.idea/
+.vscode/
+*.iml
+*.log
+*.tmp
+*.part
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+apps/launcher/dist/
+apps/launcher/node_modules/
+apps/launcher/src-tauri/target/
+apps/launcher/coverage/
+apps/launcher/playwright-report/
+apps/launcher/test-results/
+apps/association-api/.next/
+apps/association-api/node_modules/
+apps/association-api/coverage/
+minecraft/private-client-core/.gradle/
+minecraft/private-client-core/build/
+minecraft/private-client-core/run/
+
+# Local Gradle caches. These hold decompiled MCP data, Forge patches, and
+# Minecraft-derived archives fetched at build time. Publishing them would be
+# redistribution of third-party content, which the project licence does not
+# permit. They are rebuilt from pinned sources by the Core build.
+.gradle/
+.gradle-local/
+
+# Local package store, not a build input.
+.pnpm-store/
+
+# Machine-local tooling configuration and third-party agent skill packages.
+.claude/settings.local.json
+.claude/skills/
+.agents/skills/
+skills-lock.json
+
+artifacts/*
+!artifacts/.gitkeep
+reports/*
+!reports/.gitkeep
+
+# Never commit game/account material.
+instance/
+runtime/
+profiles/
+skins/
+*.jar
+*.keystore
+*.pfx
+*.p12
+
+# Updater signing material. The private key lives outside the repository; these
+# patterns exist so a stray copy can never be committed.
+*.key
+!*.key.pub
+minisign*.key
+.env
+.env.*
+!.env.example
+
+# Required, hash-verified Gradle bootstrap for reproducible Core builds.
+!minecraft/private-client-core/gradle/wrapper/gradle-wrapper.jar

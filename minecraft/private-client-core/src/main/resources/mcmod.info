@@ -1,0 +1,16 @@
+[
+  {
+    "modid": "privateclientcore",
+    "name": "Private Client Core",
+    "description": "Client-side profile bridge and informational HUD foundation for Private Client.",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": ["Private Client"],
+    "credits": "Built for Forge ${forgeversion}.",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

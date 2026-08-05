@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "minecraftVersion": "1.8.9",
+  "loader": "forge",
+  "mods": [
+    {
+      "id": "private-client-core",
+      "name": "Private Client Core",
+      "provider": "private-client-build",
+      "version": "1.0.0",
+      "fileName": "private-client-core-1.0.0.jar",
+      "hashPolicy": "compute-at-release",
+      "required": true,
+      "removable": false,
+      "license": "Private Client Source License",
+      "reviewStatus": "internal",
+      "notes": "Skonsolidowany pakiet rdzennych modułów klienta (Private Optimization Engine, Toggle Sprint, Private Freelook, Private Nametags, 3D Item Physics, Scoreboard Customization). Zewnętrzne komponenty Private Pack (HitDelayFix, OptiFine, FoamFix, Phosphor, PolyPatcher, CrashPatch, Raw Input, ServerlistBufferFixer, QuickQuit i pozostałe) są przypięte w optifine.rs i pobierane w czasie działania, nigdy nie są dołączane do instalatora. Licencje: LICENSES.md."
+    },
+    {
+      "id": "in-game-account-switcher",
+      "name": "In-Game Account Switcher",
+      "provider": "modrinth",
+      "projectId": "cudtvDnd",
+      "versionId": "uI9n4nDb",
+      "version": "7.1.2-fo1.8.9",
+      "url": "https://cdn.modrinth.com//data/cudtvDnd/versions/7.1.2-fo1.8.9/InGameAccountSwitcher-Forge-1.8.9-7.1.2.jar",
+      "sha512": "a6c9b1092fc30f7eb7946b4c865039506f9cc38331d628140a0a390969779b236586580bb5f9e30875cf4e43fce2751906fe0f0df333344625c707b93d1ef5ba",
+      "sha1": "be37574260a921d0e9e9518890babf9cc2fd9230",
+      "required": true,
+      "removable": false,
+      "license": "LGPL-3.0-or-later",
+      "reviewStatus": "external-required",
+      "notes": "Wymagany moduł logowania kont Microsoft i przełączania kont w grze dla Forge 1.8.9."
+    }
+  ]
+}

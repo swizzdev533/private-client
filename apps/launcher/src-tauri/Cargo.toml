@@ -1,0 +1,72 @@
+[package]
+name = "private-client-launcher"
+version = "1.0.0"
+description = "Private Client launcher for Minecraft 1.8.9 Forge"
+authors = ["Private Client Contributors"]
+edition = "2021"
+publish = false
+license-file = "../../../LICENSE"
+rust-version = "1.85"
+
+[lib]
+name = "private_client_launcher"
+crate-type = ["rlib"]
+
+[features]
+default = []
+custom-protocol = ["tauri/custom-protocol"]
+
+[[bin]]
+name = "private-client"
+path = "src/main.rs"
+test = false
+bench = false
+
+[build-dependencies]
+tauri-build = { version = "=2.6.3", features = [] }
+
+[dependencies]
+base64 = "=0.22.1"
+chrono = { version = "=0.4.45", features = ["serde"] }
+directories = "=6.0.0"
+fs2 = "=0.4.3"
+futures-util = "=0.3.33"
+hex = "=0.4.3"
+once_cell = "=1.21.4"
+parking_lot = "=0.12.5"
+regex = "=1.13.1"
+reqwest = { version = "=0.12.28", default-features = false, features = ["json", "rustls-tls", "stream"] }
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.151"
+sha1 = "=0.10.6"
+sha2 = "=0.10.9"
+sysinfo = "=0.39.6"
+tauri = { version = "=2.11.5", features = ["protocol-asset"] }
+tauri-plugin-dialog = "=2.6.0"
+tauri-plugin-updater = { version = "=2.10.1", default-features = false, features = ["rustls-tls", "zip"] }
+thiserror = "=2.0.19"
+tokio = { version = "=1.53.1", features = ["fs", "io-util", "macros", "process", "rt-multi-thread", "sync", "time"] }
+url = "=2.5.8"
+uuid = { version = "=1.24.0", features = ["serde", "v4"] }
+walkdir = "=2.5.0"
+zip = { version = "=2.4.2", default-features = false, features = ["deflate"] }
+
+[dev-dependencies]
+tempfile = "=3.27.0"
+
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = "s"
+panic = "abort"
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+dbg_macro = "deny"
+todo = "deny"
+unwrap_used = "deny"
+expect_used = "deny"
+large_futures = "allow"

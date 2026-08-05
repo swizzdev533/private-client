@@ -1,0 +1,31 @@
+{
+  "name": "private-client-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@11.18.0",
+  "workspaces": [
+    "apps/launcher",
+    "apps/association-api"
+  ],
+  "scripts": {
+    "dev": "pnpm --dir apps/launcher tauri dev",
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-all.ps1",
+    "build:ui": "pnpm --dir apps/launcher build",
+    "build:association-api": "pnpm --dir apps/association-api build",
+    "build:launcher": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-launcher.ps1",
+    "build:launcher:xwin": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-launcher.ps1 -ForceXwin",
+    "build:core": "powershell -NoProfile -ExecutionPolicy Bypass -File minecraft/private-client-core/scripts/build-core.ps1",
+    "art": "node scripts/design/generate-backgrounds.mjs && node scripts/design/generate-icons.mjs",
+    "art:logo": "node scripts/design/generate-logo.mjs",
+    "art:preview": "node scripts/design/generate-backgrounds.mjs --preview && node scripts/design/generate-icons.mjs --preview",
+    "test": "pnpm --dir apps/launcher test",
+    "test:association-api": "pnpm --dir apps/association-api test",
+    "test:rust": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/test-rust.ps1",
+    "test:core": "powershell -NoProfile -ExecutionPolicy Bypass -File minecraft/private-client-core/scripts/build-core.ps1",
+    "typecheck": "pnpm --dir apps/launcher typecheck",
+    "lint": "pnpm --dir apps/launcher lint",
+    "release:manifest": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/release/build-update-manifest.ps1",
+    "verify:release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verification/verify-release.ps1"
+  }
+}
