@@ -81,9 +81,12 @@ if ([string]::IsNullOrWhiteSpace($signature)) {
     throw "Signature file $signaturePath is empty."
 }
 
-# The release asset name is the installer file name URL-encoded; GitHub serves
-# it verbatim under the tag, so the manifest URL must match byte for byte.
-$assetName = [System.Uri]::EscapeDataString($installer.Name)
+# GitHub rewrites release asset names on upload: every character outside
+# [A-Za-z0-9._-] becomes a dot, so "Private Client_1.0.0_x64-setup.exe" is
+# served as "Private.Client_1.0.0_x64-setup.exe". URL-encoding the original
+# name instead produces a link that 404s — and it 404s only in production,
+# against a published release, which is precisely where it must not.
+$assetName = [System.Text.RegularExpressions.Regex]::Replace($installer.Name, '[^A-Za-z0-9._-]', '.')
 $downloadUrl = "https://github.com/$repositorySlug/releases/download/$Tag/$assetName"
 
 $hash = (Get-FileHash -LiteralPath $installer.FullName -Algorithm SHA512).Hash
