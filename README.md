@@ -1,9 +1,12 @@
-# Private Client
+# Private Client Beta 1.0
 
-Private Client is a privacy-first Windows launcher for an isolated Minecraft
-Java Edition 1.8.9 + Forge 11.15.1.2318 instance. It has exactly two primary
-views: **PLAY** and **MODS**. The launcher has no advertising, analytics,
-account backend, or Microsoft sign-in form.
+Private Client is a Windows launcher for an isolated Minecraft Java Edition
+1.8.9 + Forge 11.15.1.2318 instance. It has exactly two primary views:
+**PLAY** and **MODS**.
+
+"Beta 1.0" is the product line, not the build number. The build version is
+shown in the launcher footer and is what the signed updater compares; see
+`CHANGELOG.md` for released builds.
 
 The installer contains only original Private Client code and artwork. Minecraft,
 Forge metadata, libraries, assets, and user-selected mods are fetched from their

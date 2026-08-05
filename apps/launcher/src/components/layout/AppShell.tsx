@@ -38,6 +38,9 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
         <div className="brand" aria-label="Private Client" data-tauri-drag-region>
           <div className="brand__copy" data-tauri-drag-region>
             <strong>PRIVATE CLIENT</strong>
+            {/* Product line, not the build version: the footer carries the real
+                version, and this must not be read as one. */}
+            <span>BETA 1.0</span>
           </div>
         </div>
 
@@ -131,7 +134,7 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
           v{appVersion}
           {/* The window has no OS title bar, so this is the only in-app way to
               tell the beta install apart from the stable one. */}
-          {channel === "beta" ? <strong className="app-footer__channel">BETA</strong> : null}
+          {channel === "beta" ? <strong className="app-footer__channel">TEST BUILD</strong> : null}
         </span>
       </footer>
     </div>

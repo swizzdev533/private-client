@@ -63,6 +63,7 @@ export function PlayView({ reducedMotion }: PlayViewProps) {
         <div className="play-layout">
           <section className="play-hero">
             <div className="play-hero__title">
+              <span className="play-hero__edition">BETA 1.0</span>
               <h1>
                 PRIVATE
                 <br />

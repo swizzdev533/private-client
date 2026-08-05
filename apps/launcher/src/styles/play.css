@@ -21,6 +21,16 @@
   margin: 27px 0 26px;
 }
 
+/* Product-line marker above the wordmark. Deliberately quiet: the hero already
+   carries the weight, and this must not compete with it or read as a version. */
+.play-hero__edition {
+  display: inline-block;
+  color: var(--paper-faint);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+}
+
 .play-hero__title h1 {
   margin: 13px 0 18px;
   font-size: clamp(2.9rem, 5vw, 5.7rem);
