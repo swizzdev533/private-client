@@ -66,7 +66,7 @@ export function Modal({
             size="icon"
             variant="ghost"
             onClick={onClose}
-            aria-label="Zamknij okno"
+            aria-label="Close dialog"
             icon={<X size={18} />}
           />
         </header>

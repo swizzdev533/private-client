@@ -21,14 +21,14 @@ export function OptifineModal() {
 
   return (
     <Modal
-      title="Instalacja Private Pack"
-      eyebrow="DEDYKOWANY PAKIET MODÓW 1.8.9"
-      description="Private Pack instaluje OptiFine, oryginalne mody PvP i zestaw zgodnych optymalizacji Forge 1.8.9. Składniki są pobierane osobno i sprawdzane przypiętymi hashami, ale launcher prezentuje je jako jeden zarządzany pakiet."
+      title="Install Private Pack"
+      eyebrow="CURATED 1.8.9 MOD PACK"
+      description="Private Pack installs OptiFine, the original PvP mods and a set of compatible Forge 1.8.9 optimizations. Components are downloaded separately and checked against pinned hashes, but the launcher presents them as one managed pack."
       onClose={close}
       footer={
         <>
           <Button variant="ghost" onClick={close}>
-            ANULUJ
+            CANCEL
           </Button>
           <Button
             variant="primary"
@@ -38,7 +38,7 @@ export function OptifineModal() {
               void downloadOptifine();
             }}
           >
-            POBIERZ I ZAINSTALUJ PRIVATE PACK
+            DOWNLOAD AND INSTALL PRIVATE PACK
           </Button>
         </>
       }
@@ -49,7 +49,7 @@ export function OptifineModal() {
             <MousePointerClick size={18} />
           </span>
           <div>
-            <strong>1. Kliknij Importuj</strong>
+            <strong>1. Click Import</strong>
           </div>
         </article>
         <article>
@@ -57,7 +57,7 @@ export function OptifineModal() {
             <PackageCheck size={18} />
           </span>
           <div>
-            <strong>2. Paczka niezbędnych modów zainstaluje się sama</strong>
+            <strong>2. The required mod pack installs itself</strong>
           </div>
         </article>
         <article>
@@ -65,14 +65,14 @@ export function OptifineModal() {
             <Sparkles size={18} />
           </span>
           <div>
-            <strong>3. Ciesz się feelingiem topowych clientów</strong>
+            <strong>3. Enjoy the feel of a top-tier client</strong>
           </div>
         </article>
       </div>
       <p className="optifine-notice">
         <ShieldCheck size={15} />
-        Pakiet Private Pack jest pobierany z oficjalnych i zweryfikowanych źródeł Modrinth /
-        GitHub.
+        Private Pack is downloaded from official, verified Modrinth and GitHub
+        sources.
       </p>
     </Modal>
   );

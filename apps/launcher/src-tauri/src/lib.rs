@@ -43,14 +43,14 @@ pub fn run() {
                     let is_single_instance =
                         matches!(err.code, AppErrorCode::SingleInstanceViolation);
                     let title = if is_single_instance {
-                        "Private Client Jest Już Uruchomiony"
+                        "Private Client Is Already Running"
                     } else {
-                        "Błąd Uruchamiania Private Client"
+                        "Private Client Startup Error"
                     };
                     let message = if is_single_instance {
-                        "Aplikacja Private Client jest już uruchomiona w tle.\n\nSprawdź pasek zadań lub Menedżer Zadań."
+                        "Private Client is already running in the background.\n\nCheck the taskbar or Task Manager."
                     } else {
-                        &format!("Nie udało się zainicjalizować aplikacji Private Client:\n\n{}", err.message)
+                        &format!("Could not initialize Private Client:\n\n{}", err.message)
                     };
 
                     app.dialog()

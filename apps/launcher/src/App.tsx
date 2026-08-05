@@ -23,8 +23,8 @@ function reportSubscriptionFailure(error: unknown) {
   console.error("Launcher event subscription failed", error);
   useUiStore.getState().notify({
     tone: "error",
-    title: "Utracono połączenie ze zdarzeniami launchera",
-    message: "Uruchom launcher ponownie, aby przywrócić aktualizacje stanu.",
+    title: "Lost connection to launcher events",
+    message: "Restart the launcher to restore state updates.",
   });
 }
 

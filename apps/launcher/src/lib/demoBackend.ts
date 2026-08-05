@@ -43,7 +43,7 @@ function record(value: unknown): Record<string, unknown> {
 function getString(args: unknown, key: string): string {
   const value = record(args)[key];
   if (typeof value !== "string") {
-    throw new Error(`Brak poprawnego argumentu: ${key}`);
+    throw new Error(`Missing or invalid argument: `);
   }
   return value;
 }
@@ -75,16 +75,16 @@ function startDemoLaunch(): void {
   const steps: Array<
     [LauncherSnapshot["launch"]["state"], string, number, boolean, number]
   > = [
-    ["VALIDATING", "Sprawdzanie konfiguracji", 6, true, 0],
-    ["CHECKING_RUNTIME", "Sprawdzanie Java 8", 14, true, 260],
-    ["PREPARING_INSTANCE", "Przygotowywanie izolowanej instancji", 26, true, 520],
-    ["VERIFYING_GAME_FILES", "Weryfikowanie plików gry", 42, true, 780],
-    ["VERIFYING_FORGE", "Weryfikowanie Forge 1.8.9", 57, true, 1_040],
-    ["CHECKING_REQUIRED_MODS", "Sprawdzanie wymaganych modów", 70, true, 1_300],
-    ["APPLYING_PENDING_CHANGES", "Stosowanie oczekujących zmian", 80, false, 1_560],
-    ["BUILDING_LAUNCH_COMMAND", "Przygotowywanie bezpiecznego procesu", 90, false, 1_820],
-    ["LAUNCHING", "Uruchamianie Minecraft", 97, false, 2_080],
-    ["RUNNING", "Minecraft 1.8.9 działa", 100, false, 2_440],
+    ["VALIDATING", "Checking configuration", 6, true, 0],
+    ["CHECKING_RUNTIME", "Checking Java 8", 14, true, 260],
+    ["PREPARING_INSTANCE", "Preparing the isolated instance", 26, true, 520],
+    ["VERIFYING_GAME_FILES", "Verifying game files", 42, true, 780],
+    ["VERIFYING_FORGE", "Verifying Forge 1.8.9", 57, true, 1_040],
+    ["CHECKING_REQUIRED_MODS", "Checking required mods", 70, true, 1_300],
+    ["APPLYING_PENDING_CHANGES", "Applying pending changes", 80, false, 1_560],
+    ["BUILDING_LAUNCH_COMMAND", "Preparing the sandboxed process", 90, false, 1_820],
+    ["LAUNCHING", "Launching Minecraft", 97, false, 2_080],
+    ["RUNNING", "Minecraft 1.8.9 is running", 100, false, 2_440],
   ];
 
   steps.forEach(([state, message, progress, canCancel, delay]) => {
@@ -100,7 +100,7 @@ function startDemoLaunch(): void {
       window.setTimeout(() => {
         snapshot.launch = {
           state: "FAILED",
-          message: "Kontrolowany crash Forge z fixture E2E",
+          message: "Controlled Forge crash from the E2E fixture",
           progress: null,
           canCancel: false,
           errorId: "GameCrashed",
@@ -115,7 +115,7 @@ function startDemoLaunch(): void {
 function findLibraryMod(projectId: string): ModSummary {
   const selected = library.find((mod) => mod.projectId === projectId);
   if (!selected) {
-    throw new Error("Mod nie istnieje w katalogu demonstracyjnym.");
+    throw new Error("That mod does not exist in the demo catalog.");
   }
   return selected;
 }
@@ -148,12 +148,12 @@ function syncLibraryInstallState(): void {
 }
 
 function search(args: ModSearchRequest): ModSearchResponse {
-  const normalized = args.query.trim().toLocaleLowerCase("pl-PL");
+  const normalized = args.query.trim().toLocaleLowerCase("en-US");
   let results = library.filter(
     (mod) =>
       normalized.length === 0 ||
       `${mod.name} ${mod.author} ${mod.description}`
-        .toLocaleLowerCase("pl-PL")
+        .toLocaleLowerCase("en-US")
         .includes(normalized),
   );
 
@@ -218,7 +218,7 @@ function installPlan(projectId: string): InstallPlan {
     filesToReplace: mod.installed ? [`${mod.id}-old.jar`] : [],
     warnings:
       mod.releaseType === "beta"
-        ? ["To wydanie beta. Może być mniej stabilne niż release."]
+        ? ["This is a beta release. It may be less stable than a stable release."]
         : [],
   };
 }
@@ -245,18 +245,18 @@ async function performInstall(projectId: string): Promise<{
     emit("launcher://mods-changed", { reason: "queued" });
     return {
       ok: true,
-      message: "Instalacja została dodana do kolejki.",
+      message: "The installation was added to the queue.",
       queued: true,
     };
   }
 
   const operationId = `install-${Date.now()}`;
   const phases: Array<[string, string, number]> = [
-    ["RESOLVING_DEPENDENCIES", "Rozwiązywanie zależności", 18],
-    ["DOWNLOADING_TEMPORARY_FILES", "Pobieranie do stagingu", 44],
-    ["CALCULATING_SHA512", "Weryfikowanie SHA-512", 67],
-    ["VALIDATING_JAR_STRUCTURE", "Walidowanie struktury JAR", 82],
-    ["INSTALLING_ATOMICALLY", "Instalowanie atomowe", 94],
+    ["RESOLVING_DEPENDENCIES", "Resolving dependencies", 18],
+    ["DOWNLOADING_TEMPORARY_FILES", "Downloading to staging", 44],
+    ["CALCULATING_SHA512", "Verifying SHA-512", 67],
+    ["VALIDATING_JAR_STRUCTURE", "Validating JAR structure", 82],
+    ["INSTALLING_ATOMICALLY", "Installing atomically", 94],
   ];
 
   for (const [phase, message, progress] of phases) {
@@ -272,9 +272,9 @@ async function performInstall(projectId: string): Promise<{
     if (projectId === "demo-download-error" && phase === "DOWNLOADING_TEMPORARY_FILES") {
       throw new DomainError({
         id: "DownloadFailed",
-        title: "Pobieranie nie powiodło się",
-        message: "Kontrolowany błąd pobierania z fixture E2E.",
-        resolution: "Spróbuj ponownie po sprawdzeniu połączenia.",
+        title: "The download failed",
+        message: "Controlled download failure from the E2E fixture.",
+        resolution: "Check your connection and try again.",
         logPath: "C:\\PrivateClient\\logs\\fixture-download.log",
       });
     }
@@ -289,12 +289,12 @@ async function performInstall(projectId: string): Promise<{
     operationId,
     targetId: projectId,
     phase: "INSTALLED",
-    message: "Mod został bezpiecznie zainstalowany",
+    message: "The mod was installed safely",
     progress: 100,
   } satisfies OperationProgress);
   emit("launcher://mods-changed", { reason: "installed", projectId });
 
-  return { ok: true, message: `${mod.name} został zainstalowany.`, queued: false };
+  return { ok: true, message: ` was installed.`, queued: false };
 }
 
 export function subscribeDemo(name: DemoEventName, listener: DemoListener): () => void {
@@ -315,35 +315,35 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
       if (snapshot.launch.state === "RUNNING") {
         return {
           ok: true,
-          message: "Okno gry zostało przywrócone.",
+          message: "The game window was restored.",
           queued: false,
         };
       }
       startDemoLaunch();
-      return { ok: true, message: "Uruchamianie rozpoczęte.", queued: false };
+      return { ok: true, message: "Startup began.", queued: false };
     case "cancel_launch":
       clearLaunchTimers();
       setLaunchState("IDLE", "Uruchamianie anulowane bezpiecznie", null, false);
-      return { ok: true, message: "Operacja została anulowana.", queued: false };
+      return { ok: true, message: "The operation was cancelled.", queued: false };
     case "stop_game":
-      setLaunchState("STOPPING", "Zamykanie procesu gry", null, false);
+      setLaunchState("STOPPING", "Stopping the game process", null, false);
       window.setTimeout(() => {
-        setLaunchState("EXITED", "Gra została zamknięta poprawnie", null, false);
+        setLaunchState("EXITED", "The game closed cleanly", null, false);
       }, 500);
-      return { ok: true, message: "Wysłano prośbę o zamknięcie.", queued: false };
+      return { ok: true, message: "A shutdown request was sent.", queued: false };
     case "focus_game_window":
-      return { ok: true, message: "Okno gry zostało przywrócone.", queued: false };
+      return { ok: true, message: "The game window was restored.", queued: false };
     case "save_launcher_settings": {
       const settings = record(args).settings as LauncherSettings;
       snapshot.settings = structuredClone(settings);
       return structuredClone(snapshot.settings);
     }
     case "open_logs_directory":
-      return { ok: true, message: "Otworzono katalog logów.", queued: false };
+      return { ok: true, message: "Opened the logs directory.", queued: false };
     case "export_logs":
       return {
         ok: true,
-        message: "Utworzono zredagowane lokalne archiwum logów.",
+        message: "Created a redacted local log archive.",
         queued: false,
       };
     // The dev backend never reaches a real release host; it reports "current"
@@ -359,9 +359,9 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
     case "install_update":
       throw new DomainError({
         id: "UpdateFailed",
-        title: "Aktualizacje są niedostępne w trybie deweloperskim",
-        message: "Podpisany kanał aktualizacji działa tylko w zbudowanej aplikacji.",
-        resolution: "Uruchom zainstalowaną aplikację Private Client.",
+        title: "Updates are unavailable in development mode",
+        message: "The signed update channel only works in a built application.",
+        resolution: "Start the installed Private Client application.",
         logPath: null,
       });
     case "search_modrinth":
@@ -378,10 +378,10 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
       const projectId = getString(args, "projectId");
       const selected = installed.find((mod) => mod.projectId === projectId);
       if (!selected) {
-        throw new Error("Mod nie jest zainstalowany.");
+        throw new Error("That mod is not installed.");
       }
       if (selected.required || selected.dependents.length > 0) {
-        throw new Error("Ten mod jest wymagany i nie może zostać usunięty.");
+        throw new Error("This mod is required and cannot be removed.");
       }
       if (snapshot.launch.state === "RUNNING") {
         pending = [
@@ -401,14 +401,14 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
         emit("launcher://mods-changed", { reason: "queued" });
         return {
           ok: true,
-          message: "Usuwanie zostało dodane do kolejki.",
+          message: "The removal was added to the queue.",
           queued: true,
         };
       }
       installed = installed.filter((mod) => mod.projectId !== projectId);
       syncLibraryInstallState();
       emit("launcher://mods-changed", { reason: "removed", projectId });
-      return { ok: true, message: `${selected.name} został usunięty.`, queued: false };
+      return { ok: true, message: ` was removed.`, queued: false };
     }
     case "update_mod": {
       const projectId = getString(args, "projectId");
@@ -419,13 +419,13 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
       pending = pending.filter((operation) => operation.id !== operationId);
       snapshot.instance.pendingOperations = pending.length;
       emit("launcher://mods-changed", { reason: "queue-updated" });
-      return { ok: true, message: "Usunięto operację z kolejki.", queued: false };
+      return { ok: true, message: "The operation was removed from the queue.", queued: false };
     }
     case "apply_pending_operations":
       pending = [];
       snapshot.instance.pendingOperations = 0;
       emit("launcher://mods-changed", { reason: "queue-applied" });
-      return { ok: true, message: "Zastosowano oczekujące operacje.", queued: false };
+      return { ok: true, message: "Pending operations were applied.", queued: false };
     case "download_optifine":
     case "import_optifine": {
       const existingOptifine = installed.some((mod) => mod.id === "optifine-local");
@@ -442,7 +442,7 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
           versionId: "local-import",
           name: "OptiFine 1.8.9",
           author: "sp614x",
-          description: "Oficjalne wydanie OptiFine HD U M5 dla 1.8.9.",
+          description: "The official OptiFine HD U M5 release for 1.8.9.",
           version: "HD U M5",
           license: "External local file",
           trust: "VERIFIED",
@@ -465,7 +465,7 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
           versionId: "x99qPdUO",
           name: "Animatium Legacy (OverflowAnimations)",
           author: "Polyfrost",
-          description: "Oryginalny zewnętrzny mod animacji 1.7 dla Forge 1.8.9.",
+          description: "The original external 1.7 animation mod for Forge 1.8.9.",
           version: "2.2.2",
           license: "LGPL-3.0-only",
           trust: "FROM_MODRINTH",
@@ -490,7 +490,7 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
           name: "HitDelayFix",
           author: "ghast",
           description:
-            "Usunięcie opóźnienia ataku (leftClickCounter) po nietrafionym ciosie.",
+            "Removes the attack delay (leftClickCounter) after a missed hit.",
           version: "1.0.1",
           license: "MIT",
           trust: "VERIFIED",
@@ -514,7 +514,7 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
           versionId: "v1.0.0",
           name: "Fullbright",
           author: "Modrinth",
-          description: "Maksymalna jasność w ciemnościach i jaskiniach bez cieni.",
+          description: "Maximum brightness in darkness and caves, without shadows.",
           version: "1.0.0",
           license: "CC-BY-NC-ND-4.0",
           trust: "FROM_MODRINTH",
@@ -537,7 +537,7 @@ export async function invokeDemo(command: string, args?: unknown): Promise<unkno
       return {
         ok: true,
         message:
-          "Private Pack z oryginalnymi HitDelayFix, Animatium Legacy i Fullbright został zweryfikowany i zainstalowany.",
+          "Private Pack with the original HitDelayFix, Animatium Legacy and Fullbright was verified and installed.",
         queued: false,
       };
     }

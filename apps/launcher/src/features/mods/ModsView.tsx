@@ -25,7 +25,7 @@ interface ModsViewProps {
 
 function CardSkeletons() {
   return (
-    <div className="mods-grid" aria-label="Ładowanie modów">
+    <div className="mods-grid" aria-label="Loading mods">
       {[0, 1, 2, 3, 4, 5].map((item) => (
         <div className="mod-card mod-card--skeleton" key={item}>
           <div className="skeleton" />
@@ -83,10 +83,10 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
       <div className="page__inner mods-page">
         <header className="mods-header">
           <div className="mods-header__copy">
-            <h1>Biblioteka modów</h1>
+            <h1>Mod library</h1>
             <p>
-              Wyszukuj oficjalne projekty, sprawdzaj zgodność i instaluj wraz z
-              zależnościami w jednej bezpiecznej transakcji.
+              Search official projects, check compatibility, and install them together
+              with their dependencies in one safe transaction.
             </p>
           </div>
           <div className="mods-header__actions">
@@ -108,13 +108,13 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
                 void Promise.all([search(), refreshLocalState()]);
               }}
             >
-              ODŚWIEŻ
+              REFRESH
             </Button>
           </div>
         </header>
 
         <div className="mods-toolbar">
-          <div className="mods-subviews" role="tablist" aria-label="Widok modów">
+          <div className="mods-subviews" role="tablist" aria-label="Mod view">
             <button
               type="button"
               role="tab"
@@ -154,15 +154,15 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
               <Search size={17} aria-hidden="true" />
               <input
                 type="search"
-                placeholder="Wyszukaj mod na Modrinth…"
+                placeholder="Search Modrinth for a mod…"
                 value={query}
                 onChange={(event) => {
                   setQuery(event.target.value);
                 }}
-                aria-label="Wyszukaj mod"
+                aria-label="Search mods"
               />
               <Button type="submit" variant="primary" size="sm" busy={searching}>
-                SZUKAJ
+                SEARCH
               </Button>
             </form>
           ) : null}
@@ -216,9 +216,9 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
                         void prevPage();
                       }}
                     >
-                      POPRZEDNIA STRONA
+                      PREVIOUS PAGE
                     </Button>
-                    <span className="mods-pagination__info">Strona {page + 1}</span>
+                    <span className="mods-pagination__info">Page {page + 1}</span>
                     <Button
                       variant="secondary"
                       size="sm"
@@ -228,15 +228,15 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
                         void nextPage();
                       }}
                     >
-                      NASTĘPNA STRONA
+                      NEXT PAGE
                     </Button>
                   </div>
                 </>
               ) : (
                 <EmptyState
                   icon={<Search size={22} />}
-                  title="Brak kompatybilnych wyników"
-                  description="Zmień wyszukiwaną frazę lub filtry. Private Client nie pokaże pliku jako instalowalnego, jeśli nie pasuje do Forge 1.8.9."
+                  title="No compatible results"
+                  description="Change the search term or filters. Private Client will not offer a file as installable unless it matches Forge 1.8.9."
                   action={
                     <Button
                       variant="secondary"
@@ -245,7 +245,7 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
                         void search();
                       }}
                     >
-                      WYCZYŚĆ WYSZUKIWANIE
+                      CLEAR SEARCH
                     </Button>
                   }
                 />
@@ -280,8 +280,8 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
               ) : (
                 <EmptyState
                   icon={<Boxes size={22} />}
-                  title="Brak opcjonalnych modów"
-                  description="Wróć do Library i wybierz kompatybilny projekt. Wymagane składniki klienta pojawią się automatycznie."
+                  title="No optional mods"
+                  description="Go back to Library and pick a compatible project. Required client components appear automatically."
                   action={
                     <Button
                       variant="secondary"
@@ -289,7 +289,7 @@ export function ModsView({ reducedMotion }: ModsViewProps) {
                         setView("library");
                       }}
                     >
-                      OTWÓRZ LIBRARY
+                      OPEN LIBRARY
                     </Button>
                   }
                 />

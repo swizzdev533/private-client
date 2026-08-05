@@ -55,7 +55,7 @@ function notifyError(error: unknown): void {
       ? error
       : new DomainError({
           id: "UnexpectedError",
-          title: "Operacja nie powiodła się",
+          title: "The operation failed",
           message: error instanceof Error ? error.message : String(error),
           resolution: null,
           logPath: null,
@@ -122,7 +122,7 @@ export const useModsStore = create<ModsState>((set, get) => ({
         useUiStore.getState().notify({
           tone: "warning",
           title: "Tryb offline",
-          message: "Wyświetlane są wyłącznie zapisane wyniki. Instalacja jest wyłączona.",
+          message: "Showing cached results only. Installing is disabled.",
         });
       }
     } catch (error) {
@@ -209,7 +209,7 @@ export const useModsStore = create<ModsState>((set, get) => ({
       const result = await modsApi.remove(mod.projectId);
       useUiStore.getState().notify({
         tone: result.queued ? "warning" : "success",
-        title: result.queued ? "Dodano do kolejki" : "Mod usunięty",
+        title: result.queued ? "Added to the queue" : "Mod removed",
         message: result.message,
       });
       await Promise.all([get().refreshLocalState(), get().search()]);
@@ -258,7 +258,7 @@ export const useModsStore = create<ModsState>((set, get) => ({
       const result = await modsApi.importOptifine();
       useUiStore.getState().notify({
         tone: result.queued ? "warning" : "success",
-        title: result.queued ? "Dodano do kolejki" : "Import zakończony",
+        title: result.queued ? "Added to the queue" : "Import complete",
         message: result.message,
       });
       await get().refreshLocalState();
@@ -282,7 +282,7 @@ export const useModsStore = create<ModsState>((set, get) => ({
       const result = await modsApi.applyPending();
       useUiStore.getState().notify({
         tone: "success",
-        title: "Kolejka zastosowana",
+        title: "Queue applied",
         message: result.message,
       });
       await get().refreshLocalState();

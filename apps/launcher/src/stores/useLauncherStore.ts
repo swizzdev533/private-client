@@ -37,7 +37,7 @@ function notifyError(error: unknown): void {
       ? error
       : new DomainError({
           id: "UnexpectedError",
-          title: "Operacja nie powiodła się",
+          title: "The operation failed",
           message: error instanceof Error ? error.message : String(error),
           resolution: null,
           logPath: null,
@@ -83,8 +83,8 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       if (!silent && !update.available) {
         useUiStore.getState().notify({
           tone: "neutral",
-          title: "Launcher jest aktualny",
-          message: `Zainstalowana wersja ${update.currentVersion} jest najnowsza.`,
+          title: "The launcher is up to date",
+          message: `Installed version  is the newest.`,
         });
       }
     } catch (error) {
@@ -106,7 +106,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       const result = await launcherApi.installUpdate();
       useUiStore.getState().notify({
         tone: "success",
-        title: "Aktualizacja gotowa",
+        title: "Update ready",
         message: result.message,
       });
     } catch (error) {
@@ -136,7 +136,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
         state === "RUNNING" ? await launcherApi.focusGame() : await launcherApi.launch();
       useUiStore.getState().notify({
         tone: "success",
-        title: state === "RUNNING" ? "Gra jest aktywna" : "Uruchamianie",
+        title: state === "RUNNING" ? "The game is running" : "Starting",
         message: result.message,
       });
     } catch (error) {
@@ -151,7 +151,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       const result = await launcherApi.cancelLaunch();
       useUiStore.getState().notify({
         tone: "neutral",
-        title: "Operacja anulowana",
+        title: "Operation cancelled",
         message: result.message,
       });
     } catch (error) {
@@ -166,7 +166,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       const result = await launcherApi.stop();
       useUiStore.getState().notify({
         tone: "neutral",
-        title: "Zamykanie gry",
+        title: "Stopping the game",
         message: result.message,
       });
     } catch (error) {
@@ -183,8 +183,8 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       }));
       useUiStore.getState().notify({
         tone: "success",
-        title: "Ustawienia zapisane",
-        message: "Zmiany zostaną użyte podczas kolejnego uruchomienia gry.",
+        title: "Settings saved",
+        message: "The changes will apply the next time the game starts.",
       });
       return true;
     } catch (error) {
@@ -197,7 +197,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       const result = await launcherApi.openLogs();
       useUiStore.getState().notify({
         tone: "neutral",
-        title: "Lokalne logi",
+        title: "Local logs",
         message: result.message,
       });
     } catch (error) {
@@ -209,7 +209,7 @@ export const useLauncherStore = create<LauncherState>((set, get) => ({
       const result = await launcherApi.exportLogs();
       useUiStore.getState().notify({
         tone: "success",
-        title: "Eksport gotowy",
+        title: "Export ready",
         message: result.message,
       });
     } catch (error) {

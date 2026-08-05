@@ -19,8 +19,8 @@ export function PendingQueue({ operations, onCancel, onApply }: PendingQueueProp
     <section className="pending-queue">
       <header>
         <div>
-          <span className="eyebrow">BEZPIECZNA KOLEJKA</span>
-          <h3>Zmiany oczekujące na zamknięcie gry</h3>
+          <span className="eyebrow">SAFE QUEUE</span>
+          <h3>Changes waiting for the game to close</h3>
         </div>
         <Button
           size="sm"
@@ -28,7 +28,7 @@ export function PendingQueue({ operations, onCancel, onApply }: PendingQueueProp
           icon={<ListRestart size={14} />}
           onClick={onApply}
         >
-          ZASTOSUJ
+          APPLY
         </Button>
       </header>
       <div className="pending-queue__items">
@@ -49,7 +49,7 @@ export function PendingQueue({ operations, onCancel, onApply }: PendingQueueProp
               size="icon"
               variant="ghost"
               icon={<Trash2 size={14} />}
-              aria-label={`Usuń ${operation.targetName} z kolejki`}
+              aria-label={`Remove  from the queue`}
               onClick={() => {
                 onCancel(operation.id);
               }}

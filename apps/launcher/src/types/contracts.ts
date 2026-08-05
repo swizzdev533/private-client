@@ -65,7 +65,7 @@ export const launcherSettingsSchema = z
     downloadConcurrency: z.number().int().min(1).max(8),
   })
   .refine((value) => value.memoryMaxMb >= value.memoryMinMb, {
-    message: "Maksymalny RAM nie może być mniejszy od minimalnego.",
+    message: "Maximum RAM cannot be lower than the minimum.",
     path: ["memoryMaxMb"],
   });
 
@@ -284,20 +284,20 @@ export class DomainError extends Error {
 }
 
 export const launchStateLabels: Readonly<Record<LaunchState, string>> = {
-  IDLE: "Gotowy do gry",
-  VALIDATING: "Sprawdzanie konfiguracji",
-  CHECKING_RUNTIME: "Sprawdzanie Java 8",
-  PREPARING_INSTANCE: "Przygotowywanie instancji",
-  VERIFYING_GAME_FILES: "Weryfikowanie plików gry",
-  INSTALLING_GAME_FILES: "Instalowanie Minecraft 1.8.9",
-  VERIFYING_FORGE: "Weryfikowanie Forge",
-  INSTALLING_FORGE: "Instalowanie Forge",
-  CHECKING_REQUIRED_MODS: "Sprawdzanie wymaganych modów",
-  APPLYING_PENDING_CHANGES: "Stosowanie oczekujących zmian",
-  BUILDING_LAUNCH_COMMAND: "Przygotowywanie procesu",
-  LAUNCHING: "Uruchamianie gry",
-  RUNNING: "Gra jest uruchomiona",
-  STOPPING: "Zatrzymywanie gry",
-  EXITED: "Gra została zamknięta",
-  FAILED: "Uruchamianie nie powiodło się",
+  IDLE: "Ready to play",
+  VALIDATING: "Checking configuration",
+  CHECKING_RUNTIME: "Checking Java 8",
+  PREPARING_INSTANCE: "Preparing the instance",
+  VERIFYING_GAME_FILES: "Verifying game files",
+  INSTALLING_GAME_FILES: "Installing Minecraft 1.8.9",
+  VERIFYING_FORGE: "Verifying Forge",
+  INSTALLING_FORGE: "Installing Forge",
+  CHECKING_REQUIRED_MODS: "Checking required mods",
+  APPLYING_PENDING_CHANGES: "Applying pending changes",
+  BUILDING_LAUNCH_COMMAND: "Preparing the process",
+  LAUNCHING: "Starting the game",
+  RUNNING: "The game is running",
+  STOPPING: "Stopping the game",
+  EXITED: "The game was closed",
+  FAILED: "Startup failed",
 };

@@ -38,7 +38,7 @@ export function NoticeStack() {
                 onClick={() => {
                   dismiss(notice.id);
                 }}
-                aria-label="Zamknij powiadomienie"
+                aria-label="Dismiss notification"
               >
                 <X size={14} />
               </button>

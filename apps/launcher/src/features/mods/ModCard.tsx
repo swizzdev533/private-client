@@ -112,7 +112,7 @@ export function ModCard({ mod, busy, onInstall, onUpdateInstalled }: ModCardProp
           }}
           aria-expanded={expanded}
         >
-          SZCZEGÓŁY
+          DETAILS
           <ChevronDown
             size={14}
             className={expanded ? "is-rotated" : ""}
@@ -146,19 +146,19 @@ export function ModCard({ mod, busy, onInstall, onUpdateInstalled }: ModCardProp
             <dd>1.8.9</dd>
           </div>
           <div>
-            <dt>Środowisko</dt>
+            <dt>Environment</dt>
             <dd>{mod.environment.replaceAll("_", " + ")}</dd>
           </div>
           <div>
-            <dt>Licencja</dt>
+            <dt>License</dt>
             <dd>{mod.license}</dd>
           </div>
           <div>
-            <dt>Zależności</dt>
+            <dt>Dependencies</dt>
             <dd>{mod.dependencyCount}</dd>
           </div>
           <div>
-            <dt>Wydanie</dt>
+            <dt>Release</dt>
             <dd>{mod.releaseType}</dd>
           </div>
         </motion.dl>

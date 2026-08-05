@@ -41,7 +41,7 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
           </div>
         </div>
 
-        <nav className="main-nav" aria-label="Główna nawigacja">
+        <nav className="main-nav" aria-label="Main navigation">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const selected = activeTab === tab.id;
@@ -74,8 +74,8 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
             <button
               type="button"
               className="topbar__utility"
-              aria-label="Otwórz ustawienia"
-              title="Ustawienia"
+              aria-label="Open settings"
+              title="Settings"
               onClick={() => {
                 openModal("settings");
               }}
@@ -84,12 +84,12 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
             </button>
           </div>
 
-          <div className="window-controls" aria-label="Sterowanie oknem">
+          <div className="window-controls" aria-label="Window controls">
             <button
               type="button"
               disabled={!isTauriRuntime}
-              aria-label="Minimalizuj okno"
-              title="Minimalizuj"
+              aria-label="Minimize window"
+              title="Minimize"
               onClick={() => {
                 void windowApi.minimize();
               }}
@@ -99,8 +99,8 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
             <button
               type="button"
               disabled={!isTauriRuntime}
-              aria-label="Maksymalizuj lub przywróć okno"
-              title="Maksymalizuj / przywróć"
+              aria-label="Maximize or restore window"
+              title="Maximize / restore"
               onClick={() => {
                 void windowApi.toggleMaximize();
               }}
@@ -111,8 +111,8 @@ export function AppShell({ children, appVersion, channel }: AppShellProps) {
               type="button"
               className="window-control--close"
               disabled={!isTauriRuntime}
-              aria-label="Zamknij aplikację"
-              title="Zamknij"
+              aria-label="Close application"
+              title="Close"
               onClick={() => {
                 void windowApi.close();
               }}

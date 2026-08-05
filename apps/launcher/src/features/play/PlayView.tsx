@@ -16,7 +16,7 @@ interface PlayViewProps {
 
 function PlaySkeleton() {
   return (
-    <div className="play-layout play-layout--loading" aria-label="Ładowanie PLAY">
+    <div className="play-layout play-layout--loading" aria-label="Loading PLAY">
       <div>
         <div className="skeleton" style={{ width: 120, height: 16 }} />
         <div className="skeleton" style={{ width: "78%", height: 72, marginTop: 20 }} />
@@ -68,7 +68,7 @@ export function PlayView({ reducedMotion }: PlayViewProps) {
                 <br />
                 <em>CLIENT</em>
               </h1>
-              <p>Private Client to jest nowy sposób na odkrycie Minecrafta.</p>
+              <p>Private Client is a new way to rediscover Minecraft.</p>
             </div>
 
             <div className="play-actions">
@@ -91,7 +91,7 @@ export function PlayView({ reducedMotion }: PlayViewProps) {
                 }
               >
                 {running
-                  ? "OTWÓRZ GRĘ"
+                  ? "OPEN GAME"
                   : working
                     ? launch.state.replaceAll("_", " ")
                     : "PLAY"}
@@ -137,7 +137,7 @@ export function PlayView({ reducedMotion }: PlayViewProps) {
             fallback={
               <div
                 className="skeleton play-skeleton__model"
-                aria-label="Ładowanie modelu gracza"
+                aria-label="Loading player model"
               />
             }
           >

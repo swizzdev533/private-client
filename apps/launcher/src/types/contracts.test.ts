@@ -52,7 +52,7 @@ describe("frontend contracts", () => {
   it("rejects an invalid launch progress", () => {
     const result = launchProgressSchema.safeParse({
       state: "RUNNING",
-      message: "Gra działa",
+      message: "The game is running",
       progress: 140,
       canCancel: false,
       errorId: null,

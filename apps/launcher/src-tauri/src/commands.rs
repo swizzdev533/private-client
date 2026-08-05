@@ -46,7 +46,7 @@ pub async fn launch_game(state: State<'_, Arc<AppState>>) -> AppResult<CommandRe
     let settings = state.config.load_settings()?;
     let request = crate::contracts::LaunchRequest::from_settings(&settings);
     match crate::launcher::launch(Arc::clone(state.inner()), request).await {
-        Ok(_) => Ok(CommandResult::completed("Minecraft został uruchomiony")),
+        Ok(_) => Ok(CommandResult::completed("Minecraft has started")),
         Err(error) => {
             let error = error.with_log(state.logger.path());
             let mut launch = state.launch_state();
@@ -89,7 +89,7 @@ pub fn save_launcher_settings(
 #[tauri::command]
 pub fn open_logs_directory(state: State<'_, Arc<AppState>>) -> AppResult<CommandResult> {
     crate::diagnostics::open_logs(&state)?;
-    Ok(CommandResult::completed("Otwarto katalog logów"))
+    Ok(CommandResult::completed("Opened the logs directory"))
 }
 
 #[tauri::command]
@@ -104,7 +104,7 @@ pub fn export_logs(state: State<'_, Arc<AppState>>) -> AppResult<CommandResult> 
     let destination_text = destination.to_string_lossy().into_owned();
     let exported = crate::diagnostics::export_logs(&state, &destination_text)?;
     Ok(CommandResult::completed(format!(
-        "Wyeksportowano logi: {exported}"
+        "Exported logs: {exported}"
     )))
 }
 
@@ -160,7 +160,7 @@ pub async fn install_mod(
         },
     )
     .await?;
-    Ok(operation_result("Mod został zainstalowany", result.queued))
+    Ok(operation_result("The mod was installed", result.queued))
 }
 
 /// Every project id that "remove Private Pack" must clean up.
@@ -222,10 +222,10 @@ pub async fn remove_mod(
                 queued |= result.queued;
             }
         }
-        return Ok(operation_result("Private Pack został usunięty", queued));
+        return Ok(operation_result("Private Pack was removed", queued));
     }
     let result = crate::mods::remove(&state, RemoveModRequest { project_id }).await?;
-    Ok(operation_result("Mod został usunięty", result.queued))
+    Ok(operation_result("The mod was removed", result.queued))
 }
 
 #[tauri::command(rename_all = "camelCase")]
@@ -241,7 +241,7 @@ pub async fn update_mod(
         },
     )
     .await?;
-    Ok(operation_result("Mod został zaktualizowany", result.queued))
+    Ok(operation_result("The mod was updated", result.queued))
 }
 
 #[tauri::command]
@@ -300,21 +300,21 @@ pub async fn cancel_pending_operation(
 ) -> AppResult<CommandResult> {
     crate::mods::cancel_pending(&state, &operation_id).await?;
     Ok(CommandResult::completed(
-        "Operacja oczekująca została anulowana",
+        "The pending operation was cancelled",
     ))
 }
 
 #[tauri::command]
 pub async fn apply_pending_operations(state: State<'_, Arc<AppState>>) -> AppResult<CommandResult> {
     crate::mods::apply_pending(&state).await?;
-    Ok(CommandResult::completed("Zastosowano operacje oczekujące"))
+    Ok(CommandResult::completed("Pending operations were applied"))
 }
 
 #[tauri::command]
 pub async fn download_optifine(state: State<'_, Arc<AppState>>) -> AppResult<CommandResult> {
     crate::optifine::download_and_import(&state).await?;
     Ok(CommandResult::completed(
-        "Private Pack został automatycznie pobrany, zweryfikowany i zainstalowany",
+        "Private Pack was downloaded, verified and installed automatically",
     ))
 }
 
@@ -336,7 +336,7 @@ pub async fn import_optifine(state: State<'_, Arc<AppState>>) -> AppResult<Comma
         .details(error.to_string())
     })?;
     let Some(selected) = selected else {
-        return Ok(CommandResult::completed("Anulowano import OptiFine"));
+        return Ok(CommandResult::completed("OptiFine import cancelled"));
     };
     let path = selected.into_path().map_err(|error| {
         AppError::new(
@@ -354,14 +354,16 @@ pub async fn import_optifine(state: State<'_, Arc<AppState>>) -> AppResult<Comma
     )
     .await?;
     Ok(operation_result(
-        "Private Pack został kompletnie zaimportowany i zweryfikowany",
+        "Private Pack was fully imported and verified",
         result.queued,
     ))
 }
 
 fn operation_result(message: &str, queued: bool) -> CommandResult {
     if queued {
-        CommandResult::queued(format!("{message}; zmiana czeka na zamknięcie gry"))
+        CommandResult::queued(format!(
+            "{message}; the change is waiting for the game to close"
+        ))
     } else {
         CommandResult::completed(message)
     }
@@ -403,7 +405,7 @@ pub async fn check_for_update(state: State<'_, Arc<AppState>>) -> AppResult<Upda
 pub async fn install_update(state: State<'_, Arc<AppState>>) -> AppResult<CommandResult> {
     crate::updater::install(state.inner()).await?;
     Ok(CommandResult::completed(
-        "Aktualizacja została pobrana i zweryfikowana",
+        "The update was downloaded and verified",
     ))
 }
 

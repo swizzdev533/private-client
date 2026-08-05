@@ -181,7 +181,7 @@ impl Default for LaunchState {
     fn default() -> Self {
         Self {
             state: LaunchPhase::Idle,
-            message: "Instancja jest gotowa".to_owned(),
+            message: "The instance is ready".to_owned(),
             progress: None,
             can_cancel: false,
             error_id: None,

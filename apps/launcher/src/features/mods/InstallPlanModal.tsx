@@ -26,14 +26,14 @@ export function InstallPlanModal() {
   return (
     <Modal
       title={selectedMod ? `Zainstaluj ${selectedMod.name}` : "Plan instalacji"}
-      eyebrow="TRANSAKCJA ATOMOWA"
-      description="Backend przypina konkretną wersję, weryfikuje źródło, zależności, strukturę JAR i SHA-512 przed zmianą instancji."
+      eyebrow="ATOMIC TRANSACTION"
+      description="The backend pins an exact version and verifies the source, dependencies, JAR structure and SHA-512 before changing the instance."
       onClose={close}
       width="lg"
       footer={
         <>
           <Button variant="ghost" onClick={close} disabled={busy}>
-            ANULUJ
+            CANCEL
           </Button>
           <Button
             variant="primary"
@@ -44,7 +44,7 @@ export function InstallPlanModal() {
               void confirm();
             }}
           >
-            ZATWIERDŹ I ZAINSTALUJ
+            CONFIRM AND INSTALL
           </Button>
         </>
       }
@@ -62,13 +62,13 @@ export function InstallPlanModal() {
               <FileArchive size={24} />
             </span>
             <div>
-              <span>WYBRANE WYDANIE</span>
+              <span>SELECTED RELEASE</span>
               <h3>{plan.requestedMod.name}</h3>
               <p>{plan.requestedMod.version} · Minecraft 1.8.9 · Forge</p>
             </div>
             <Badge tone="success">
               <ShieldCheck size={11} />
-              GOTOWY PLAN
+              PLAN READY
             </Badge>
           </section>
 
@@ -83,7 +83,7 @@ export function InstallPlanModal() {
             <div>
               <dt>
                 <Boxes size={13} />
-                Wymagane zależności
+                Required dependencies
               </dt>
               <dd>{plan.dependencies.length}</dd>
             </div>
@@ -98,7 +98,7 @@ export function InstallPlanModal() {
 
           {plan.dependencies.length > 0 ? (
             <section className="install-plan__dependencies">
-              <span className="eyebrow">ZALEŻNOŚCI</span>
+              <span className="eyebrow">DEPENDENCIES</span>
               {plan.dependencies.map((dependency) => (
                 <article key={dependency.versionId}>
                   <CheckCircle2 size={15} />

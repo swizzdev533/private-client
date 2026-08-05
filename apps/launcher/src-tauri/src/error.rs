@@ -103,29 +103,29 @@ impl AppError {
 fn defaults(code: &AppErrorCode) -> (&'static str, Option<&'static str>) {
     match code {
         AppErrorCode::RuntimeDownloadFailed => (
-            "Nie udało się przygotować Java 8",
-            Some("Sprawdź internet i uruchom PLAY ponownie, albo wskaż java.exe w ustawieniach."),
+            "Could not prepare Java 8",
+            Some("Check your internet connection and press PLAY again, or select java.exe in settings."),
         ),
         AppErrorCode::JavaNotFound
         | AppErrorCode::JavaIncompatible
         | AppErrorCode::JavaArchitectureMismatch => (
-            "Nieprawidłowe środowisko Java",
-            Some("Wskaż 64-bitową Javę 8 w ustawieniach launchera."),
+            "Invalid Java environment",
+            Some("Select a 64-bit Java 8 runtime in the launcher settings."),
         ),
         AppErrorCode::InstanceCorrupted
         | AppErrorCode::MinecraftMetadataInvalid
         | AppErrorCode::ForgeInstallationFailed
         | AppErrorCode::ManifestInvalid => (
-            "Instancja gry wymaga naprawy",
-            Some("Uruchom ponownie launcher i ponów przygotowanie instancji."),
+            "The game instance needs repair",
+            Some("Restart the launcher and prepare the instance again."),
         ),
         AppErrorCode::DownloadFailed
         | AppErrorCode::DownloadTooLarge
         | AppErrorCode::DownloadTimedOut
         | AppErrorCode::NetworkUnavailable
         | AppErrorCode::UpdateFailed => (
-            "Nie udało się pobrać pliku",
-            Some("Sprawdź połączenie z internetem i spróbuj ponownie."),
+            "Could not download the file",
+            Some("Check your internet connection and try again."),
         ),
         AppErrorCode::UnsafeRedirect
         | AppErrorCode::UntrustedHost
@@ -133,51 +133,51 @@ fn defaults(code: &AppErrorCode) -> (&'static str, Option<&'static str>) {
         | AppErrorCode::JarValidationFailed
         | AppErrorCode::PathTraversalDetected
         | AppErrorCode::SymlinkDetected => (
-            "Zablokowano niebezpieczny plik",
-            Some("Nie omijaj weryfikacji; wybierz oryginalny plik z zaufanego źródła."),
+            "An unsafe file was blocked",
+            Some("Do not bypass verification; choose the original file from a trusted source."),
         ),
         AppErrorCode::ModNotFound
         | AppErrorCode::ModIncompatible
         | AppErrorCode::ModAlreadyInstalled
         | AppErrorCode::DependencyConflict
         | AppErrorCode::DependencyCycle => (
-            "Nie można zastosować moda",
-            Some("Wybierz wydanie zgodne z Minecraft 1.8.9 i Forge."),
+            "Could not apply the mod",
+            Some("Choose a release compatible with Minecraft 1.8.9 and Forge."),
         ),
         AppErrorCode::GameAlreadyRunning
         | AppErrorCode::GameNotRunning
         | AppErrorCode::LaunchFailed
         | AppErrorCode::GameCrashed
         | AppErrorCode::OperationBlockedWhileRunning => (
-            "Nie można uruchomić gry",
-            Some("Zamknij aktywną grę, sprawdź logi i spróbuj ponownie."),
+            "Could not start the game",
+            Some("Close the running game, check the logs and try again."),
         ),
         AppErrorCode::ProfileCacheInvalid | AppErrorCode::ProfileWriteFailed => (
-            "Profil lokalny jest nieprawidłowy",
-            Some("Zaloguj się ponownie wewnątrz gry, aby odtworzyć profil."),
+            "The local profile is invalid",
+            Some("Sign in again inside the game to rebuild the profile."),
         ),
         AppErrorCode::RollbackFailed => (
-            "Nie udało się wycofać zmiany",
-            Some("Nie uruchamiaj gry; sprawdź lokalne logi launchera."),
+            "Could not roll back the change",
+            Some("Do not start the game; check the local launcher logs."),
         ),
         AppErrorCode::InsufficientMemory => (
-            "Za mało wolnej pamięci",
-            Some("Zmniejsz maksymalny RAM gry w ustawieniach."),
+            "Not enough free memory",
+            Some("Lower the maximum game RAM in settings."),
         ),
         AppErrorCode::InsufficientDiskSpace => (
-            "Za mało miejsca na dysku",
-            Some("Zwolnij co najmniej 2 GiB na dysku lokalnym."),
+            "Not enough disk space",
+            Some("Free at least 2 GiB on the local drive."),
         ),
         AppErrorCode::PermissionDenied | AppErrorCode::SingleInstanceViolation => (
-            "Launcher nie ma dostępu",
-            Some("Zamknij inne okno launchera i sprawdź uprawnienia katalogu danych."),
+            "The launcher was denied access",
+            Some("Close the other launcher window and check the data directory permissions."),
         ),
         AppErrorCode::InvalidInput
         | AppErrorCode::Io
         | AppErrorCode::Json
         | AppErrorCode::OperationQueued => (
-            "Operacja nie powiodła się",
-            Some("Sprawdź podane dane i spróbuj ponownie."),
+            "The operation failed",
+            Some("Check the values you entered and try again."),
         ),
     }
 }
@@ -243,7 +243,7 @@ mod tests {
             .with_log(Path::new(r"C:\Private Client\logs\launcher.log"));
         let value = serde_json::to_value(error)?;
         assert_eq!(value["id"], "JavaNotFound");
-        assert_eq!(value["title"], "Nieprawidłowe środowisko Java");
+        assert_eq!(value["title"], "Invalid Java environment");
         assert_eq!(value["message"], "Java was not found");
         assert!(value["resolution"].is_string());
         assert!(value["logPath"].is_string());

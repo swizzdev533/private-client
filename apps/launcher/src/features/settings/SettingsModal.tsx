@@ -49,14 +49,14 @@ export function SettingsModal() {
 
   return (
     <Modal
-      title="Ustawienia techniczne"
-      eyebrow="LOKALNA KONFIGURACJA"
-      description="Parametry instancji są walidowane przez backend i zapisywane atomowo na tym urządzeniu."
+      title="Technical settings"
+      eyebrow="LOCAL CONFIGURATION"
+      description="Instance parameters are validated by the backend and written atomically on this device."
       onClose={closeModal}
       footer={
         <>
           <Button variant="ghost" onClick={closeModal}>
-            ANULUJ
+            CANCEL
           </Button>
           <Button
             variant="primary"
@@ -76,7 +76,7 @@ export function SettingsModal() {
               });
             }}
           >
-            ZAPISZ
+            SAVE
           </Button>
         </>
       }
@@ -86,22 +86,22 @@ export function SettingsModal() {
           <label className="field field--full">
             <span className="field__label">
               <Cpu size={14} />
-              Ścieżka do Java 8
+              Java 8 path
             </span>
             <input
               value={draft.javaPath ?? ""}
-              placeholder="Wykryj automatycznie"
+              placeholder="Detect automatically"
               onChange={(event) => {
                 update("javaPath", event.target.value.trim() || null);
               }}
             />
-            <small>Backend potwierdzi wersję, architekturę i możliwość uruchomienia.</small>
+            <small>The backend confirms the version, architecture and that it can run.</small>
           </label>
 
           <label className="field field--full">
             <span className="field__label">
               <Zap size={14} />
-              Maksymalny RAM
+              Maximum RAM
               <strong className="field__value">{draft.memoryMaxMb} MB</strong>
             </span>
             <div className="field__slider">
@@ -111,7 +111,7 @@ export function SettingsModal() {
                 max={16_384}
                 step={256}
                 value={draft.memoryMaxMb}
-                aria-label="Maksymalny RAM w MB"
+                aria-label="Maximum RAM in MB"
                 onChange={(event) => {
                   setAllocatedMemory(Number(event.target.value));
                 }}
@@ -122,13 +122,13 @@ export function SettingsModal() {
               </div>
             </div>
             <small>
-              Minimum pozostaje na {draft.memoryMinMb} MB, maksimum wyznacza suwak.
+              The minimum stays at {draft.memoryMinMb} MB; the slider sets the maximum.
             </small>
           </label>
 
           {validation && !validation.success ? (
             <p className="field-error">
-              {validation.error.issues[0]?.message ?? "Sprawdź ustawienia pamięci."}
+              {validation.error.issues[0]?.message ?? "Check the memory settings."}
             </p>
           ) : null}
 
@@ -137,16 +137,16 @@ export function SettingsModal() {
               <RefreshCcw size={17} />
             </span>
             <span>
-              <strong>Automatyczne sprawdzanie aktualizacji</strong>
+              <strong>Automatic update checks</strong>
               <small>
-                Przy starcie launchera pyta podpisany kanał aktualizacji o nowszą wersję.
-                Nic nie instaluje się bez Twojej zgody.
+                Asks the signed update channel for a newer version when the launcher
+                starts. Nothing installs without your consent.
               </small>
             </span>
             <input
               type="checkbox"
               checked={draft.autoUpdateChecks}
-              aria-label="Automatyczne sprawdzanie aktualizacji"
+              aria-label="Automatic update checks"
               onChange={(event) => {
                 update("autoUpdateChecks", event.target.checked);
               }}
@@ -154,12 +154,12 @@ export function SettingsModal() {
           </label>
 
           <div className="field field--short">
-            <span className="field__label">Aktualizacja launchera</span>
+            <span className="field__label">Launcher update</span>
             <div className="field__readonly">
               <strong>
                 {updateStatus?.available
-                  ? `Dostępna wersja ${updateStatus?.availableVersion}`
-                  : `Wersja ${appVersion}`}
+                  ? `Version ${updateStatus?.availableVersion} available`
+                  : `Version ${appVersion}`}
               </strong>
               <Button
                 variant={updateStatus?.available ? "primary" : "ghost"}
@@ -173,7 +173,7 @@ export function SettingsModal() {
                   }
                 }}
               >
-                {updateStatus?.available ? "ZAINSTALUJ" : "SPRAWDŹ"}
+                {updateStatus?.available ? "INSTALL" : "CHECK"}
               </Button>
             </div>
           </div>
@@ -183,8 +183,8 @@ export function SettingsModal() {
               <Zap size={17} />
             </span>
             <span>
-              <strong>Ogranicz animacje</strong>
-              <small>Wyłącza parallax, autoobrót modelu i złożone przejścia.</small>
+              <strong>Reduce motion</strong>
+              <small>Disables parallax, model auto-rotation and complex transitions.</small>
             </span>
             <input
               type="checkbox"
@@ -196,10 +196,10 @@ export function SettingsModal() {
           </label>
 
           <div className="field field--short">
-            <span className="field__label">Równoległe pobierania</span>
+            <span className="field__label">Parallel downloads</span>
             <div className="field__readonly">
               <strong>{draft.downloadConcurrency}</strong>
-              <span>Stała wartość backendu</span>
+              <span>Fixed backend value</span>
             </div>
           </div>
         </div>

@@ -56,15 +56,15 @@ describe("IPC validation boundary", () => {
   it("preserves a typed backend error instead of masking it", async () => {
     vi.spyOn(demoBackend, "invokeDemo").mockRejectedValue({
       id: "OperationBlockedWhileRunning",
-      title: "Gra jest aktywna",
-      message: "Nie można aktualizować w trakcie gry.",
-      resolution: "Zamknij grę.",
+      title: "The game is running",
+      message: "Cannot update while the game is running.",
+      resolution: "Close the game.",
       logPath: null,
     });
 
     await expect(invokeValidated("install_update", z.unknown())).rejects.toMatchObject({
       id: "OperationBlockedWhileRunning",
-      resolution: "Zamknij grę.",
+      resolution: "Close the game.",
     });
   });
 

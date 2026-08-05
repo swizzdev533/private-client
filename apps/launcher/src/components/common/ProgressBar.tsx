@@ -12,13 +12,13 @@ export function ProgressBar({ value, label, compact = false }: ProgressBarProps)
       {label ? (
         <div className="progress__meta">
           <span>{label}</span>
-          {value === null ? <span>Pracuję…</span> : <span>{Math.round(value)}%</span>}
+          {value === null ? <span>Working…</span> : <span>{Math.round(value)}%</span>}
         </div>
       ) : null}
       <div
         className={`progress__track ${value === null ? "is-indeterminate" : ""}`}
         role="progressbar"
-        aria-label={label ?? "Postęp operacji"}
+        aria-label={label ?? "Operation progress"}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-valuenow={value ?? undefined}

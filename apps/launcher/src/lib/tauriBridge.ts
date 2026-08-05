@@ -10,9 +10,9 @@ async function loadDevelopmentBackend() {
   if (!import.meta.env.DEV) {
     throw new DomainError({
       id: "BackendUnavailable",
-      title: "Backend jest niedostępny",
-      message: "Produkcja launchera wymaga natywnego środowiska Tauri.",
-      resolution: "Uruchom zainstalowaną aplikację Private Client.",
+      title: "The backend is unavailable",
+      message: "The production launcher requires the native Tauri runtime.",
+      resolution: "Start the installed Private Client application.",
       logPath: null,
     });
   }
@@ -34,11 +34,11 @@ function errorShape(error: unknown): DomainErrorShape {
     const value = error as Record<string, unknown>;
     return {
       id: typeof value.id === "string" ? value.id : "UnexpectedError",
-      title: typeof value.title === "string" ? value.title : "Operacja nie powiodła się",
+      title: typeof value.title === "string" ? value.title : "The operation failed",
       message:
         typeof value.message === "string"
           ? value.message
-          : "Backend zwrócił nieznany błąd.",
+          : "The backend returned an unknown error.",
       resolution: typeof value.resolution === "string" ? value.resolution : null,
       logPath: typeof value.logPath === "string" ? value.logPath : null,
     };
@@ -46,7 +46,7 @@ function errorShape(error: unknown): DomainErrorShape {
 
   return {
     id: "UnexpectedError",
-    title: "Operacja nie powiodła się",
+    title: "The operation failed",
     message: error instanceof Error ? error.message : String(error),
     resolution: null,
     logPath: null,

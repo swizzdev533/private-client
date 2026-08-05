@@ -1151,7 +1151,7 @@ fn append_build_records(state: &AppState, mods: &mut Vec<InstalledMod>) -> AppRe
             version_id: format!("{}-1.0.0", REQUIRED_PRIVATE_CLIENT_CORE_ID),
             name: "Private Client Core".to_owned(),
             author: "Private Client".to_owned(),
-            description: "Skonsolidowany pakiet rdzennych modułów klienta.".to_owned(),
+            description: "A consolidated bundle of the core client modules.".to_owned(),
             icon_url: None,
             version: "1.0.0".to_owned(),
             release_type: ReleaseType::Release,

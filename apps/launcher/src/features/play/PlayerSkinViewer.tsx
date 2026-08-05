@@ -122,12 +122,12 @@ export function PlayerSkinViewer({ profile, reducedMotion }: PlayerSkinViewerPro
         ref={canvasRef}
         className={`player-viewer__canvas ${viewerReady ? "is-ready" : ""}`}
         aria-label={
-          profile ? `Model skina gracza ${profile.username}` : "Zastępczy model gracza"
+          profile ? `Player skin model for ` : "Placeholder player model"
         }
       />
       <div className="player-viewer__hint">
         <Rotate3D size={13} aria-hidden="true" />
-        <span>Przeciągnij, aby obrócić</span>
+        <span>Drag to rotate</span>
       </div>
     </div>
   );

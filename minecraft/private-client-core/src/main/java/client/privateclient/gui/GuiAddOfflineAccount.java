@@ -103,7 +103,7 @@ public final class GuiAddOfflineAccount extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
         drawCenteredString(this.fontRendererObj, "Add Account", this.width / 2, 20, 0xFFFFFF);
-        String label = "Nazwa offline:";
+        String label = "Offline name:";
         this.fontRendererObj.drawString(
                 label,
                 this.width / 2 - 46 - this.fontRendererObj.getStringWidth(label),
@@ -160,21 +160,21 @@ public final class GuiAddOfflineAccount extends GuiScreen {
     private void addAccount() {
         String name = currentName();
         if (!OfflineAccountRepository.isValidName(name)) {
-            this.status = "Nazwa offline: 3-16 znakow (A-Z, 0-9, _)";
+            this.status = "Offline name: 3-16 characters (A-Z, 0-9, _)";
             return;
         }
         try {
             if (!accounts.add(name)) {
-                this.status = "To konto juz istnieje";
+                this.status = "That account already exists";
                 return;
             }
         } catch (ReflectiveOperationException exception) {
             log.error("Could not add an offline account to the account switcher", exception);
-            this.status = "Nie mozna zapisac konta";
+            this.status = "Could not save the account";
             return;
         } catch (LinkageError error) {
             log.error("Could not link the account switcher storage", error);
-            this.status = "Nie mozna zapisac konta";
+            this.status = "Could not save the account";
             return;
         }
         back();
@@ -189,13 +189,13 @@ public final class GuiAddOfflineAccount extends GuiScreen {
                 this.mc.displayGuiScreen((GuiScreen) screen);
                 return;
             }
-            this.status = "Logowanie Microsoft jest niedostepne";
+            this.status = "Microsoft sign-in is unavailable";
         } catch (ReflectiveOperationException exception) {
             log.error("Could not open the Microsoft login screen", exception);
-            this.status = "Logowanie Microsoft jest niedostepne";
+            this.status = "Microsoft sign-in is unavailable";
         } catch (LinkageError error) {
             log.error("Could not link the Microsoft login screen", error);
-            this.status = "Logowanie Microsoft jest niedostepne";
+            this.status = "Microsoft sign-in is unavailable";
         }
     }
 

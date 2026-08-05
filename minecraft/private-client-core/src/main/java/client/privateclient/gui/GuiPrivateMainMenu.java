@@ -67,8 +67,11 @@ public final class GuiPrivateMainMenu extends GuiScreen {
     private SharpFontRenderer sharpFont;
 
     private final SessionObserver sessionObserver;
+    // Fixed English locale rather than the system default: the weekday and
+    // month names are drawn with the client's own glyph atlas, and a locale
+    // picked up from the OS could ask it for glyphs it does not contain.
     private final SimpleDateFormat dateFormat =
-            new SimpleDateFormat("EEEE, d MMMM yyyy", new Locale("pl", "PL"));
+            new SimpleDateFormat("EEEE, d MMMM yyyy", Locale.ENGLISH);
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.ROOT);
     private volatile ResourceLocation playerSkin = DEFAULT_SKIN;
     private final LocalSkinCache skinCache = new LocalSkinCache(CorePaths.discover().getDataRoot());
@@ -249,7 +252,7 @@ public final class GuiPrivateMainMenu extends GuiScreen {
 
         Session session = mc.getSession();
         String username = session == null || session.getUsername() == null
-                ? "Nieznany gracz" : session.getUsername();
+                ? "Unknown player" : session.getUsername();
         text(username, x + 48, y + 10, 14.0F, 0xFFFFFFFF);
         text(accountKind(), x + 48, y + 27, 11.0F, 0xFFAAAAAA);
     }
@@ -317,7 +320,7 @@ public final class GuiPrivateMainMenu extends GuiScreen {
             // The pinned external mod may be absent in a development instance.
         }
         mc.displayGuiScreen(new GuiMessage(this, "Account Switcher",
-                "In-Game Account Switcher nie jest zaladowany."));
+                "In-Game Account Switcher is not loaded."));
     }
 
     private int profileCardY() {

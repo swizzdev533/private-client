@@ -40,7 +40,7 @@ if (typeof window !== "undefined") {
 const root = document.getElementById("root");
 
 if (!root) {
-  throw new Error("Nie znaleziono głównego elementu aplikacji.");
+  throw new Error("Could not find the application root element.");
 }
 
 createRoot(root).render(

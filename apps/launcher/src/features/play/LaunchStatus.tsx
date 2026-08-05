@@ -40,12 +40,12 @@ const stages = [
     states: ["VALIDATING", "CHECKING_RUNTIME"],
   },
   {
-    label: "Instancja",
+    label: "Instance",
     icon: Box,
     states: ["PREPARING_INSTANCE", "VERIFYING_GAME_FILES", "INSTALLING_GAME_FILES"],
   },
   {
-    label: "Forge + mody",
+    label: "Forge + mods",
     icon: Layers3,
     states: [
       "VERIFYING_FORGE",
@@ -94,12 +94,12 @@ export function LaunchStatus({ launch, instance }: LaunchStatusProps) {
           dot
         >
           {launch.state === "FAILED"
-            ? "WYMAGA UWAGI"
+            ? "NEEDS ATTENTION"
             : launch.state === "RUNNING"
               ? "RUNNING"
               : instance.healthy
-                ? "GOTOWA"
-                : "NAPRAWA"}
+                ? "READY"
+                : "REPAIR"}
         </Badge>
       </header>
 
@@ -114,7 +114,7 @@ export function LaunchStatus({ launch, instance }: LaunchStatusProps) {
       </div>
 
       {isActive && launch.state !== "RUNNING" ? (
-        <ProgressBar value={launch.progress} label="Postęp przygotowania" />
+        <ProgressBar value={launch.progress} label="Preparation progress" />
       ) : null}
 
       {launch.state === "FAILED" ? (
@@ -123,7 +123,7 @@ export function LaunchStatus({ launch, instance }: LaunchStatusProps) {
           <dl>
             {launch.errorId ? (
               <div>
-                <dt>Kod błędu</dt>
+                <dt>Error code</dt>
                 <dd>{launch.errorId}</dd>
               </div>
             ) : null}
@@ -182,7 +182,7 @@ export function LaunchStatus({ launch, instance }: LaunchStatusProps) {
           <dd>{instance.javaLabel ?? "Do wykrycia"}</dd>
         </div>
         <div>
-          <dt>Oczekujące zmiany</dt>
+          <dt>Pending changes</dt>
           <dd>{instance.pendingOperations}</dd>
         </div>
       </dl>

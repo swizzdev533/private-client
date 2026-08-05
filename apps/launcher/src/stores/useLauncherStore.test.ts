@@ -14,7 +14,7 @@ const availableUpdate: UpdateStatus = {
   available: true,
   currentVersion: "1.0.0",
   availableVersion: "1.1.0",
-  notes: "Poprawki stabilności",
+  notes: "Stability fixes",
   publishedAt: "2026-08-01T00:00:00Z",
 };
 
@@ -70,8 +70,8 @@ describe("launcher store update flow", () => {
     vi.spyOn(launcherApi, "checkForUpdate").mockRejectedValue(
       new DomainError({
         id: "NetworkUnavailable",
-        title: "Brak połączenia",
-        message: "Host aktualizacji jest nieosiągalny.",
+        title: "No connection",
+        message: "The update host is unreachable.",
         resolution: null,
         logPath: null,
       }),
@@ -87,8 +87,8 @@ describe("launcher store update flow", () => {
     vi.spyOn(launcherApi, "checkForUpdate").mockRejectedValue(
       new DomainError({
         id: "NetworkUnavailable",
-        title: "Brak połączenia",
-        message: "Host aktualizacji jest nieosiągalny.",
+        title: "No connection",
+        message: "The update host is unreachable.",
         resolution: null,
         logPath: null,
       }),
@@ -135,8 +135,8 @@ describe("launcher store update flow", () => {
     vi.spyOn(launcherApi, "installUpdate").mockRejectedValue(
       new DomainError({
         id: "OperationBlockedWhileRunning",
-        title: "Gra jest aktywna",
-        message: "Launcher nie zaktualizuje się w trakcie gry.",
+        title: "The game is running",
+        message: "The launcher will not update while the game is running.",
         resolution: null,
         logPath: null,
       }),

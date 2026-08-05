@@ -52,7 +52,7 @@ describe("Private Client launcher", () => {
     render(<App />);
 
     const navigation = screen.getByRole("navigation", {
-      name: "Główna nawigacja",
+      name: "Main navigation",
     });
     const mainTabs = within(navigation).getAllByRole("button");
     expect(mainTabs).toHaveLength(2);
@@ -61,12 +61,12 @@ describe("Private Client launcher", () => {
 
     expect(await screen.findByTestId("launch-action")).toBeVisible();
     expect(screen.queryByRole("tab", { name: /settings/i })).not.toBeInTheDocument();
-    expect(screen.queryByText("BROWSER DEMO · PODGLĄD")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Minimalizuj okno" })).toBeDisabled();
+    expect(screen.queryByText("BROWSER DEMO · PREVIEW")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Minimize window" })).toBeDisabled();
     expect(
-      screen.getByRole("button", { name: "Maksymalizuj lub przywróć okno" }),
+      screen.getByRole("button", { name: "Maximize or restore window" }),
     ).toBeDisabled();
-    expect(screen.getByRole("button", { name: "Zamknij aplikację" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Close application" })).toBeDisabled();
   });
 
   it("switches to Library and searches the browser preview catalogue", async () => {
@@ -79,9 +79,9 @@ describe("Private Client launcher", () => {
       "true",
     );
 
-    const input = screen.getByRole("searchbox", { name: "Wyszukaj mod" });
+    const input = screen.getByRole("searchbox", { name: "Search mods" });
     await user.type(input, "FoamFix");
-    await user.click(screen.getByRole("button", { name: "SZUKAJ" }));
+    await user.click(screen.getByRole("button", { name: "SEARCH" }));
 
     expect(await screen.findByText("FoamFix Legacy")).toBeVisible();
     await waitFor(() => {
@@ -104,7 +104,7 @@ describe("Private Client launcher", () => {
     expect(card).not.toBeNull();
     expect(within(card!).getByRole("button", { name: "REMOVE" })).toBeDisabled();
     await waitFor(() => {
-      expect(within(card!).getByText(/wymagany przez Private Client/i)).toBeVisible();
+      expect(within(card!).getByText(/required by Private Client/i)).toBeVisible();
     });
   });
 

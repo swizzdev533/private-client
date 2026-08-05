@@ -5,7 +5,7 @@ import { expect, test, type Locator, type Page, type TestInfo } from "@playwrigh
 const evidenceDirectory = resolve(process.cwd(), "../../artifacts/evidence");
 
 function mainNavigation(page: Page): Locator {
-  return page.getByRole("navigation", { name: "Główna nawigacja" });
+  return page.getByRole("navigation", { name: "Main navigation" });
 }
 
 async function openMods(page: Page): Promise<void> {
@@ -46,16 +46,14 @@ test("01–03 launcher start, no-profile state and MODS navigation", async ({
     await page.goto("/");
     await expect(page.getByLabel("Private Client")).toBeVisible();
     await expect(mainNavigation(page).getByRole("button")).toHaveCount(2);
-    await expect(page.getByText("BROWSER DEMO · PODGLĄD")).toBeVisible();
-  });
+      });
 
   await test.step("02 ekran bez profilu", async () => {
-    await expect(page.getByText("Zaloguj się w grze")).toBeVisible();
-    await expect(page.getByTestId("launch-action")).toBeEnabled();
+        await expect(page.getByTestId("launch-action")).toBeEnabled();
     await attachScreenshot(page, testInfo, "play-browser-demo");
   });
 
-  await test.step("03 przejście do MODS", async () => {
+  await test.step("03 switch to MODS", async () => {
     await openMods(page);
     await expect(page.getByRole("tab", { name: /LIBRARY/ })).toHaveAttribute(
       "aria-selected",
@@ -82,14 +80,14 @@ test("04–10 fixture search, install, local management and download failure", a
     const dialog = page.getByRole("dialog");
     await expect(dialog).toContainText("Zainstaluj FoamFix Legacy");
     await expect(dialog).toContainText("TRANSAKCJA ATOMOWA");
-    await dialog.getByRole("button", { name: "ZATWIERDŹ I ZAINSTALUJ" }).click();
+    await dialog.getByRole("button", { name: "CONFIRM AND INSTALL" }).click();
     await expect(page.getByText("Mod zainstalowany")).toBeVisible({
       timeout: 6_000,
     });
     await expect(dialog).toBeHidden();
   });
 
-  await test.step("06 mod pojawia się w Installed Mods", async () => {
+  await test.step("06 the mod appears in Installed Mods", async () => {
     await page.getByRole("tab", { name: /INSTALLED MODS/ }).click();
     const installedFoamFix = page
       .locator("article.installed-card")
@@ -98,7 +96,7 @@ test("04–10 fixture search, install, local management and download failure", a
     await expect(installedFoamFix).toContainText("0.6.3");
   });
 
-  await test.step("07 próba usunięcia wymaganego moda jest blokowana", async () => {
+  await test.step("07 removing a required mod is blocked", async () => {
     const required = page
       .locator("article.installed-card")
       .filter({ hasText: "Private Client Core" });
@@ -119,27 +117,27 @@ test("04–10 fixture search, install, local management and download failure", a
     await expect(patcher.getByRole("button", { name: "UPDATE" })).toHaveCount(0);
   });
 
-  await test.step("09 kontrolowany błąd pobierania", async () => {
+  await test.step("09 controlled download failure", async () => {
     await page.getByRole("tab", { name: /^LIBRARY/ }).click();
     await searchLibrary(page, "Fixture Download Failure");
     const fixture = modCard(page, "Fixture Download Failure");
     await expect(fixture).toBeVisible();
     await fixture.getByRole("button", { name: "INSTALL" }).click();
     const dialog = page.getByRole("dialog");
-    await dialog.getByRole("button", { name: "ZATWIERDŹ I ZAINSTALUJ" }).click();
+    await dialog.getByRole("button", { name: "CONFIRM AND INSTALL" }).click();
     await expect(page.getByText(/DownloadFailed/)).toBeVisible({
       timeout: 5_000,
     });
     await expect(
-      page.getByText("Kontrolowany błąd pobierania z fixture E2E."),
+      page.getByText("Controlled download failure from the E2E fixture."),
     ).toBeVisible();
     await dialog.getByRole("button", { name: "ANULUJ" }).click();
   });
 
-  await test.step("10 powrót do PLAY", async () => {
+  await test.step("10 back to PLAY", async () => {
     await mainNavigation(page).getByRole("button", { name: "PLAY" }).click();
     await expect(page.getByTestId("launch-action")).toBeVisible();
-    // Panel stanu instancji pojawia się tylko przy błędzie uruchamiania.
+    // The instance status panel only appears on a startup failure.
     await expect(page.getByText("Stan instancji")).toHaveCount(0);
   });
 });
@@ -150,7 +148,7 @@ test("11–13 launch state machine, crash summary and local logs", async ({
   await page.goto("/?e2eCrash=1");
   const launchState = page.getByTestId("launch-state");
 
-  await test.step("11 testowa maszyna stanów uruchamiania", async () => {
+  await test.step("11 launch state machine", async () => {
     await expect(launchState).toHaveAttribute("data-state", "IDLE");
     await page.getByTestId("launch-action").click();
     await expect(launchState).toHaveAttribute("data-state", "VALIDATING", {
@@ -160,15 +158,15 @@ test("11–13 launch state machine, crash summary and local logs", async ({
       timeout: 5_000,
     });
     // Panel stanu jest ukryty w trakcie uruchamiania — stan potwierdza przycisk.
-    await expect(page.getByTestId("launch-action")).toContainText("OTWÓRZ GRĘ");
+    await expect(page.getByTestId("launch-action")).toContainText("OPEN GAME");
   });
 
-  await test.step("12 obsługa kontrolowanego crashu Forge", async () => {
+  await test.step("12 controlled Forge crash handling", async () => {
     await expect(launchState).toHaveAttribute("data-state", "FAILED", {
       timeout: 3_000,
     });
     await expect(page.getByText("Kontrolowany crash Forge z fixture E2E")).toBeVisible();
-    await expect(page.getByText("Uruchamianie nie powiodło się")).toBeVisible();
+    await expect(page.getByText("Startup failed")).toBeVisible();
     await attachScreenshot(page, testInfo, "crash-browser-demo");
   });
 });

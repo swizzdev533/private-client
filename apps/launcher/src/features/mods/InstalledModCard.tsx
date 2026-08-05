@@ -40,7 +40,7 @@ export function InstalledModCard({ mod, busy, onRemove, onUpdate }: InstalledMod
         <div className="mod-card__identity">
           <div className="mod-card__title">
             <h3>{mod.name}</h3>
-            {mod.required ? <ShieldCheck size={14} aria-label="Wymagany składnik" /> : null}
+            {mod.required ? <ShieldCheck size={14} aria-label="Required component" /> : null}
           </div>
           <span>by {mod.author}</span>
         </div>
@@ -72,8 +72,8 @@ export function InstalledModCard({ mod, busy, onRemove, onUpdate }: InstalledMod
         <p className="mod-card__reason">
           <AlertTriangle size={13} />
           {mod.required
-            ? "Ten składnik jest wymagany przez Private Client."
-            : `Wymagany przez: ${mod.dependents.join(", ")}`}
+            ? "This component is required by Private Client."
+            : `Required by: `}
         </p>
       ) : null}
 
@@ -86,7 +86,7 @@ export function InstalledModCard({ mod, busy, onRemove, onUpdate }: InstalledMod
           }}
           aria-expanded={expanded}
         >
-          SZCZEGÓŁY
+          DETAILS
           <ChevronDown
             size={14}
             className={expanded ? "is-rotated" : ""}
@@ -129,15 +129,15 @@ export function InstalledModCard({ mod, busy, onRemove, onUpdate }: InstalledMod
           animate={{ opacity: 1, height: "auto" }}
         >
           <div>
-            <dt>Plik</dt>
+            <dt>File</dt>
             <dd title={mod.fileName}>{mod.fileName}</dd>
           </div>
           <div>
-            <dt>Rozmiar</dt>
+            <dt>Size</dt>
             <dd>{formatBytes(mod.fileSize)}</dd>
           </div>
           <div>
-            <dt>Licencja</dt>
+            <dt>License</dt>
             <dd>{mod.license}</dd>
           </div>
           <div className="mod-card__details--full">
