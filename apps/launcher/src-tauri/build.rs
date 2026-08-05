@@ -7,6 +7,10 @@ fn main() {
     // previously generated, now stale, resource: the executable keeps the old
     // icon while every timestamp suggests it was rebuilt.
     println!("cargo:rerun-if-changed=tauri.conf.json");
+    // The release channel is baked in via option_env!. Without this, switching
+    // channels reuses the previously compiled constant and silently produces a
+    // binary pointed at the wrong data directory and update endpoint.
+    println!("cargo:rerun-if-env-changed=PRIVATE_CLIENT_CHANNEL");
     for icon in [
         "icons/icon.ico",
         "icons/icon.png",

@@ -42,7 +42,8 @@ impl PathLayout {
                     "Windows local application data directory is unavailable",
                 )
             })?;
-        Self::for_root(local.join("Private Client"))
+        // Channel-scoped: a beta install must never touch the stable instance.
+        Self::for_root(local.join(crate::channel::CHANNEL.data_dir_name()))
     }
 
     pub fn for_root(root: PathBuf) -> AppResult<Self> {

@@ -37,6 +37,7 @@ pub async fn get_launcher_snapshot(state: State<'_, Arc<AppState>>) -> AppResult
             last_played_at: state.launch_state().finished_at,
         },
         app_version: env!("CARGO_PKG_VERSION").to_owned(),
+        channel: crate::channel::CHANNEL.as_str().to_owned(),
     })
 }
 

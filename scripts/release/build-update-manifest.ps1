@@ -16,8 +16,11 @@
 #>
 [CmdletBinding()]
 param(
-    # Release tag as published on the release host, e.g. `v1.2.0`.
+    # Release tag as published on the release host. Stable uses `vMAJOR.MINOR.PATCH`;
+    # beta uses the fixed tag `beta`, which is republished in place each build.
     [Parameter(Mandatory = $true)][string]$Tag,
+    [ValidateSet('stable', 'beta')]
+    [string]$Channel = 'stable',
     [string]$Notes,
     [string]$OutputPath
 )
@@ -25,26 +28,45 @@ param(
 $ErrorActionPreference = 'Stop'
 $projectRoot = (Resolve-Path -LiteralPath (Join-Path $PSScriptRoot '..\..')).Path
 $tauriConfPath = Join-Path $projectRoot 'apps\launcher\src-tauri\tauri.conf.json'
+$betaConfPath = Join-Path $projectRoot 'apps\launcher\src-tauri\tauri.beta.conf.json'
 $bundleDir = Join-Path $projectRoot 'apps\launcher\src-tauri\target\x86_64-pc-windows-msvc\release\bundle\nsis'
 
 if (-not $OutputPath) {
-    $OutputPath = Join-Path $projectRoot 'artifacts\release\latest.json'
+    $manifestName = if ($Channel -eq 'beta') { 'beta.json' } else { 'latest.json' }
+    $OutputPath = Join-Path $projectRoot "artifacts\release\$manifestName"
 }
-
-# The tag must match the version the binary reports, or the updater would
-# advertise a version the installed launcher can never satisfy.
-if ($Tag -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
-    throw "Tag '$Tag' must be of the form vMAJOR.MINOR.PATCH."
-}
-$tagVersion = $Matches['version']
 
 $tauriConf = Get-Content -LiteralPath $tauriConfPath -Raw | ConvertFrom-Json
 $version = $tauriConf.version
-if ($version -ne $tagVersion) {
-    throw "Tag '$Tag' does not match tauri.conf.json version '$version'."
+
+if ($Channel -eq 'beta') {
+    # The beta channel lives under one permanent tag so the endpoint URL never
+    # changes; each build replaces the assets in place.
+    if ($Tag -ne 'beta') {
+        throw "The beta channel must publish under the fixed tag 'beta', not '$Tag'."
+    }
+}
+else {
+    # The tag must match the version the binary reports, or the updater would
+    # advertise a version the installed launcher can never satisfy.
+    if ($Tag -notmatch '^v(?<version>\d+\.\d+\.\d+)$') {
+        throw "Tag '$Tag' must be of the form vMAJOR.MINOR.PATCH."
+    }
+    if ($version -ne $Matches['version']) {
+        throw "Tag '$Tag' does not match tauri.conf.json version '$version'."
+    }
 }
 
-$endpoint = $tauriConf.plugins.updater.endpoints[0]
+# The endpoint is channel-specific: the beta overlay repoints it, and writing a
+# beta manifest against the stable endpoint would publish a beta build to every
+# stable installation.
+$endpoint = if ($Channel -eq 'beta') {
+    $betaConf = Get-Content -LiteralPath $betaConfPath -Raw | ConvertFrom-Json
+    $betaConf.plugins.updater.endpoints[0]
+}
+else {
+    $tauriConf.plugins.updater.endpoints[0]
+}
 if ([string]::IsNullOrWhiteSpace($endpoint)) {
     throw 'No updater endpoint is configured; refusing to build a manifest.'
 }
@@ -57,14 +79,28 @@ if ([string]::IsNullOrWhiteSpace($tauriConf.plugins.updater.pubkey)) {
     throw 'No updater public key is pinned; refusing to build a manifest.'
 }
 
+# Both channels bundle into the same directory, so "newest setup.exe" is not a
+# safe selector: building stable and then beta would make the stable manifest
+# point at the beta installer. Match the exact product name of this channel.
+$productName = if ($Channel -eq 'beta') {
+    (Get-Content -LiteralPath $betaConfPath -Raw | ConvertFrom-Json).productName
+}
+else {
+    $tauriConf.productName
+}
+$expectedName = "${productName}_${version}_x64-setup.exe"
+
 $installer = Get-ChildItem -LiteralPath $bundleDir -File -Filter '*-setup.exe' -ErrorAction SilentlyContinue |
-    Sort-Object LastWriteTimeUtc -Descending |
+    Where-Object { $_.Name -eq $expectedName } |
     Select-Object -First 1
 if ($null -eq $installer) {
-    throw "No NSIS installer found in $bundleDir. Run pnpm build first."
-}
-if ($installer.Name -notlike "*$version*") {
-    throw "Installer '$($installer.Name)' does not carry version $version."
+    $present = (Get-ChildItem -LiteralPath $bundleDir -File -Filter '*-setup.exe' -ErrorAction SilentlyContinue |
+        ForEach-Object { $_.Name }) -join ', '
+    throw @"
+No installer named '$expectedName' in $bundleDir.
+Present: $(if ($present) { $present } else { '(none)' })
+Build the '$Channel' channel first.
+"@
 }
 
 $signaturePath = "$($installer.FullName).sig"
@@ -93,7 +129,7 @@ $hash = (Get-FileHash -LiteralPath $installer.FullName -Algorithm SHA512).Hash
 
 $manifest = [ordered]@{
     version   = $version
-    notes     = if ($Notes) { $Notes } else { "Private Client $version" }
+    notes     = if ($Notes) { $Notes } else { "$productName $version" }
     pub_date  = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
     platforms = [ordered]@{
         'windows-x86_64' = [ordered]@{

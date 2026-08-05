@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Private Client Beta",
+  "identifier": "com.privateclient.launcher.beta",
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "Private Client Beta"
+      }
+    ],
+    "security": {
+      "assetProtocol": {
+        "enable": true,
+        "scope": ["$LOCALDATA/Private Client Beta/cache/profiles/**"]
+      }
+    }
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/swizzdev533/private-client/releases/download/beta/beta.json"
+      ]
+    }
+  }
+}

@@ -257,6 +257,9 @@ pub struct LauncherSnapshot {
     pub settings: LauncherSettings,
     pub instance: InstanceSummary,
     pub app_version: String,
+    /// Build channel, `"stable"` or `"beta"`. The window has no OS title bar,
+    /// so this is how the user tells two side-by-side installs apart.
+    pub channel: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]

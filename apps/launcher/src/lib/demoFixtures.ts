@@ -7,6 +7,7 @@ import type {
 
 export const demoSnapshot: LauncherSnapshot = {
   appVersion: "1.0.0-preview",
+  channel: "stable" as const,
   profile: null,
   launch: {
     state: "IDLE",

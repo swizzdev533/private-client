@@ -15,6 +15,7 @@ import { useUiStore, type MainTab } from "../../stores/useUiStore";
 interface AppShellProps {
   children: ReactNode;
   appVersion: string;
+  channel: "stable" | "beta";
 }
 
 const tabs: Array<{
@@ -26,7 +27,7 @@ const tabs: Array<{
   { id: "mods", label: "MODS", icon: LibraryBig },
 ];
 
-export function AppShell({ children, appVersion }: AppShellProps) {
+export function AppShell({ children, appVersion, channel }: AppShellProps) {
   const activeTab = useUiStore((state) => state.activeTab);
   const setActiveTab = useUiStore((state) => state.setActiveTab);
   const openModal = useUiStore((state) => state.openModal);
@@ -126,7 +127,12 @@ export function AppShell({ children, appVersion }: AppShellProps) {
 
       <footer className="app-footer">
         <span>Private Client is not affiliated with Mojang Studios or Microsoft.</span>
-        <span>v{appVersion}</span>
+        <span>
+          v{appVersion}
+          {/* The window has no OS title bar, so this is the only in-app way to
+              tell the beta install apart from the stable one. */}
+          {channel === "beta" ? <strong className="app-footer__channel">BETA</strong> : null}
+        </span>
       </footer>
     </div>
   );

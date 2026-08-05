@@ -296,6 +296,18 @@
   line-height: 28px;
 }
 
+/* Deliberately brighter than the surrounding footer text: this marks a build
+   that must never be mistaken for the public one. */
+.app-footer__channel {
+  margin-left: 0.5em;
+  padding: 0 0.4em;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 2px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9em;
+  letter-spacing: 0.12em;
+}
+
 .page {
   position: absolute;
   inset: 0;

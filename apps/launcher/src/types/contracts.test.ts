@@ -6,7 +6,9 @@ import {
   modSearchResponseSchema,
   modSummarySchema,
   profileUpdatedEventSchema,
+  launcherSnapshotSchema,
 } from "./contracts";
+import { demoSnapshot } from "../lib/demoFixtures";
 
 const baseMod = {
   id: "mod-1",
@@ -36,6 +38,17 @@ const baseMod = {
 };
 
 describe("frontend contracts", () => {
+  it("rejects a snapshot whose channel is not a known build channel", () => {
+    // A typo'd or attacker-supplied channel must not render as the stable UI:
+    // the badge is the only in-app way to tell the two installs apart.
+    const base = { ...demoSnapshot, channel: "stabel" };
+    expect(launcherSnapshotSchema.safeParse(base).success).toBe(false);
+    expect(launcherSnapshotSchema.safeParse({ ...demoSnapshot, channel: "" }).success).toBe(false);
+    expect(launcherSnapshotSchema.safeParse({ ...demoSnapshot, channel: "beta" }).success).toBe(
+      true,
+    );
+  });
+
   it("rejects an invalid launch progress", () => {
     const result = launchProgressSchema.safeParse({
       state: "RUNNING",

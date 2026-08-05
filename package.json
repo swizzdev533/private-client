@@ -25,7 +25,10 @@
     "test:core": "powershell -NoProfile -ExecutionPolicy Bypass -File minecraft/private-client-core/scripts/build-core.ps1",
     "typecheck": "pnpm --dir apps/launcher typecheck",
     "lint": "pnpm --dir apps/launcher lint",
+    "build:beta": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build/build-launcher.ps1 -Channel beta",
     "release:manifest": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/release/build-update-manifest.ps1",
+    "release:beta": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/release/publish-beta.ps1",
+    "release:promote": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/release/promote-beta.ps1",
     "verify:release": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verification/verify-release.ps1"
   }
 }

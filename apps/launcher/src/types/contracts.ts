@@ -101,6 +101,7 @@ export const launcherSnapshotSchema = z.object({
   settings: launcherSettingsSchema,
   instance: instanceSummarySchema,
   appVersion: z.string(),
+  channel: z.enum(["stable", "beta"]),
 });
 
 export type LauncherSnapshot = z.infer<typeof launcherSnapshotSchema>;

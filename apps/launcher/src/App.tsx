@@ -92,7 +92,7 @@ export default function App() {
   return (
     <>
       <BackgroundScene reducedMotion={reducedMotion} />
-      <AppShell appVersion={snapshot?.appVersion ?? "1.0.0"}>
+      <AppShell appVersion={snapshot?.appVersion ?? "1.0.0"} channel={snapshot?.channel ?? "stable"}>
         <AnimatePresence mode="wait" initial={false}>
           {activeTab === "play" ? (
             <PlayView key="play" reducedMotion={reducedMotion} />

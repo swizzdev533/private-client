@@ -1,6 +1,10 @@
 [CmdletBinding()]
 param(
-    [switch]$ForceXwin
+    [switch]$ForceXwin,
+    # Release channel. 'beta' builds a side-by-side app with its own product
+    # name, identifier, data directory, and update endpoint.
+    [ValidateSet('stable', 'beta')]
+    [string]$Channel = 'stable'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -138,6 +142,19 @@ function Assert-XwinEnvironment {
     }
 }
 
+$channelArguments = @()
+if ($Channel -eq 'beta') {
+    $betaConfig = Join-Path $launcherDir 'src-tauri\tauri.beta.conf.json'
+    if (-not (Test-Path -LiteralPath $betaConfig -PathType Leaf)) {
+        throw "Beta config overlay is missing: $betaConfig"
+    }
+    $channelArguments = @('--config', $betaConfig)
+}
+# Baked into the binary via option_env!; build.rs watches this variable so a
+# channel switch actually recompiles instead of reusing the previous constant.
+$env:PRIVATE_CLIENT_CHANNEL = $Channel
+Write-Host "Building the '$Channel' channel."
+
 # Updater artifacts are produced only when the signing key is available.
 # Enabling them unconditionally would make every developer and CI build fail
 # with "a public key has been found, but no private key", and the alternative —
@@ -162,7 +179,7 @@ try {
     if ($useNativeMsvc) {
         Write-Host "Building the launcher natively for $targetTriple."
         Invoke-Checked 'pnpm.cmd' '--dir' $launcherDir 'tauri' 'build' `
-            '--target' $targetTriple '--bundles' 'nsis' @updaterArguments
+            '--target' $targetTriple '--bundles' 'nsis' @channelArguments @updaterArguments
     }
     else {
         Assert-XwinEnvironment
@@ -171,7 +188,7 @@ try {
             $env:XWIN_CROSS_COMPILER = 'clang'
             Write-Host "Building the launcher for $targetTriple with cargo-xwin and clang."
             Invoke-Checked 'pnpm.cmd' '--dir' $launcherDir 'tauri' 'build' `
-                '--runner' 'cargo-xwin' '--target' $targetTriple '--bundles' 'nsis' @updaterArguments
+                '--runner' 'cargo-xwin' '--target' $targetTriple '--bundles' 'nsis' @channelArguments @updaterArguments
         }
         finally {
             $env:XWIN_CROSS_COMPILER = $previousCrossCompiler
