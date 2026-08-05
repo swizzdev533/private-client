@@ -1,14 +1,19 @@
 # Changelog
 
-## Unreleased
+## 1.1.0 - 2026-08-05
 
+- Translated the entire client to English: launcher UI, backend error messages
+  and startup dialogs, and the in-game Core menus. The font glyph atlas keeps
+  its Polish characters so Polish player names still render, and streamer mode
+  still recognizes Polish join/leave chat messages.
 - Added signed launcher self-update over a pinned GitHub Releases channel, with
   downgrade/replay rejection, bounded release notes, and refusal to update while
   Minecraft is running.
 - Enabled the automatic update-check setting; it gates the startup check only
   and installation still requires an explicit user action.
-- Added `pnpm release:manifest` to build and validate the `latest.json` manifest
-  from a real signed installer.
+- Added a side-by-side private beta channel with its own product name,
+  identifier, data directory, and update endpoint.
+- Added `pnpm release:manifest`, `pnpm release:beta`, and `pnpm release:promote`.
 - Fixed the in-game account switcher reopening every time the player returned to
   the main menu; it now appears once per game session.
 
