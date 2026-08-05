@@ -81,10 +81,19 @@ Invoke-Checked 'powershell.exe' '-NoProfile' '-ExecutionPolicy' 'Bypass' `
 
 $releaseNotes = if ($Notes) { $Notes } else { "$productName $version - prywatna wersja testowa." }
 
-# `gh release view` writes to stderr when the tag is absent, which is not a
-# failure here: it simply means this is the first beta.
-& $gh release view beta 2>$null | Out-Null
-$exists = ($LASTEXITCODE -eq 0)
+# "Release not found" is the expected answer before the first beta, but gh
+# reports it on stderr, and Windows PowerShell turns a native command's stderr
+# into an ErrorRecord that $ErrorActionPreference='Stop' escalates into a
+# terminating error. Suppress every stream and judge purely by the exit code.
+$previousPreference = $ErrorActionPreference
+$ErrorActionPreference = 'Continue'
+try {
+    & $gh release view beta *> $null
+    $exists = ($LASTEXITCODE -eq 0)
+}
+finally {
+    $ErrorActionPreference = $previousPreference
+}
 
 if ($exists) {
     Write-Host 'Replacing the assets on the existing beta pre-release...'

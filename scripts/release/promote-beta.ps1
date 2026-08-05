@@ -43,6 +43,27 @@ function Invoke-Checked {
     }
 }
 
+# "Release not found" is the expected answer before a first publish, but gh
+# reports it on stderr, and Windows PowerShell turns a native command's stderr
+# into an ErrorRecord that $ErrorActionPreference='Stop' escalates into a
+# terminating error. Suppress every stream and judge purely by the exit code.
+function Test-ReleaseExists {
+    param(
+        [Parameter(Mandatory = $true)][string]$Gh,
+        [Parameter(Mandatory = $true)][string]$Tag
+    )
+
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        & $Gh release view $Tag *> $null
+        return ($LASTEXITCODE -eq 0)
+    }
+    finally {
+        $ErrorActionPreference = $previous
+    }
+}
+
 function Resolve-GhExecutable {
     $candidate = Join-Path $env:ProgramFiles 'GitHub CLI\gh.exe'
     if (Test-Path -LiteralPath $candidate -PathType Leaf) {
@@ -109,8 +130,7 @@ $($status -join "`n")
     $version = (Get-Content -LiteralPath $tauriConfPath -Raw | ConvertFrom-Json).version
     $tag = "v$version"
 
-    & $gh release view $tag 2>$null | Out-Null
-    if ($LASTEXITCODE -eq 0) {
+    if (Test-ReleaseExists -Gh $gh -Tag $tag) {
         throw "Release $tag already exists. Bump the version before promoting again."
     }
 
